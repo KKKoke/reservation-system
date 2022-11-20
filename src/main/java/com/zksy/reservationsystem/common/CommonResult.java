@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
  * 通用返回对象
  *
  * @author kkkoke
- * Created on 2022/5/9
+ * @since 2022/5/9
  */
 public class CommonResult<T> {
 

@@ -12,10 +12,13 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /**
- * 对yml文件进行解密器
+ * yml文件解密器
+ *
+ * @author kkkoke
+ * @since 2022/11/20
  */
 public class CustomYamlPropertySourceLoader extends YamlPropertySourceLoader {
-    private final String ENCRYPT_PREFIX = "ihbut{";
+    private final String ENCRYPT_PREFIX = "wgy{";
     private final String END_PREFIX = "}";
     private static final String SOURCE = "source";
 

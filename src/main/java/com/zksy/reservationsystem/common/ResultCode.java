@@ -4,7 +4,7 @@ package com.zksy.reservationsystem.common;
  * 常用API返回对象
  *
  * @author kkkoke
- * Created on 2022/4/18
+ * @since 2022/4/18
  */
 public enum ResultCode implements IError {
     SUCCESS("200", "操作成功"),

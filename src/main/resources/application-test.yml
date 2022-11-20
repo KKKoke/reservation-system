@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    username: wgy{8a7db8b58fe81ff341322b7afece963a}
+    password: WaiGuoYu*2022
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://82.157.153.9:3306/wgy_reservation?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
+    type: com.alibaba.druid.pool.DruidDataSource # 整合Druid数据库连接池
+
+# JWTToken config
+jwt:
+  tokenHeader: wgy{83a2c57fccab603af88c819b74635963} #JWT存储的请求头, Http的header中存储JWT的名称，名字可读性越差越安全
+  secret: wgy{887ad88693bb71840856f17ad7c2cb38} #JWT加解密使用的密钥, 对JWT基础信息进行加密和解密的密匙
+  expiration: 1209600 #JWT的超期限时间(60*60*24*14)
+  tokenHead: wgy{e53ae7bec229565d9ff0f301eab2a6ff} #JWT负载中拿到开头
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+#配置日志
+logging:
+  #配置日志文件路径
+  level:
+    com.zksy.reservationsystem.dao: debug #日志打印 sql 语句
+    org.springframework.web: debug
+    org.hibernate: error
+  file:
+    path: /home/projects/wgy-reservation-log/log
+    max-history: 90

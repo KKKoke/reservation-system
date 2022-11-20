@@ -3,6 +3,12 @@ package com.zksy.reservationsystem.util.encode;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.SecureUtil;
 
+/**
+ * 配置加密工具
+ *
+ * @author kkkoke
+ * @since 2022/11/20
+ */
 public class EncoderUtil {
     private static final byte[] SECRET_KEY=new byte[]{43, -124, 54, 16, 10, -62, 34, -66, -93, -118, 37, 11, -81, -2, -107, 23};
     private static final cn.hutool.crypto.symmetric.AES AES = SecureUtil.aes(SECRET_KEY);

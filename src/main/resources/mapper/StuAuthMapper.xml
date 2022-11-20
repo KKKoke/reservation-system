@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.StuAuthDao">
+    <select id="queryStuAuthPoByStudentId" resultMap="stuAuthPoMap">
+        select id, uname, passwd, is_deleted
+        from stu_auth
+        where uname = #{studentId}
+    </select>
+
+    <resultMap id="stuAuthPoMap" type="com.zksy.reservationsystem.domain.po.StuAuthPo">
+        <id property="id" column="id"/>
+        <result property="uname" column="uname"/>
+        <result property="passwd" column="passwd"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.StudentDao">
+    <select id="queryStudentDtoByStudentId" resultMap="studentDtoMap">
+        select id, name, student_id, contact
+        from student
+        where student_id = #{studentId}
+    </select>
+
+    <select id="queryStudentPoByStudentId" resultMap="studentPoMap">
+        select id, name, student_id, contact, is_deleted
+        from student
+        where student_id = #{studentId}
+    </select>
+
+    <resultMap id="studentPoMap" type="com.zksy.reservationsystem.domain.po.StudentPo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="studentId" column="student_id"/>
+        <result property="contact" column="contact"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <resultMap id="studentDtoMap" type="com.zksy.reservationsystem.domain.dto.StudentDto">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="studentId" column="student_id"/>
+        <result property="contact" column="contact"/>
+    </resultMap>
+</mapper>
