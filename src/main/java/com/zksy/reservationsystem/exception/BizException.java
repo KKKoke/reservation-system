@@ -7,7 +7,7 @@ import com.zksy.reservationsystem.common.IError;
  * 自定义异常类
  *
  * @author kkkoke
- * Created on 2022/9/17
+ * @since 2022/9/17
  */
 public class BizException extends RuntimeException {
 

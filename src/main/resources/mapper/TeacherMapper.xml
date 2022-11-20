@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.TeacherDao">
+    <select id="queryTeacherDtoByJobId" resultMap="teacherDtoMap">
+        select id, name, job_id, contact, type
+        from teacher
+        where job_id = #{jobId}
+    </select>
+
+    <select id="queryTeacherPoByJobId" resultType="com.zksy.reservationsystem.domain.po.TeacherPo">
+        select id, name, job_id, contact, type, is_deleted
+        from teacher
+        where job_id = #{jobId}
+    </select>
+
+    <resultMap id="teacherPoMap" type="com.zksy.reservationsystem.domain.po.TeacherPo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="jobId" column="job_id"/>
+        <result property="contact" column="contact"/>
+        <result property="type" column="type"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+
+    <resultMap id="teacherDtoMap" type="com.zksy.reservationsystem.domain.dto.TeacherDto">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="jobId" column="job_id"/>
+        <result property="contact" column="contact"/>
+        <result property="type" column="type"/>
+    </resultMap>
+</mapper>

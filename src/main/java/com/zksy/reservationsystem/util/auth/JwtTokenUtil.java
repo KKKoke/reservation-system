@@ -24,7 +24,7 @@ import java.util.Map;
  * HMACSHA512(base64UrlEncode(header) + "." +base64UrlEncode(payload),secret)
  *
  * @author kkkoke
- * Created on 2022/5/31.
+ * @since 2022/5/31.
  */
 @Slf4j
 @Component

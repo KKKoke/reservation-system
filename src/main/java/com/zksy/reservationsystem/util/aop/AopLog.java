@@ -2,6 +2,10 @@ package com.zksy.reservationsystem.util.aop;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONUtil;
+import com.zksy.reservationsystem.domain.po.StudentPo;
+import com.zksy.reservationsystem.domain.po.TeacherPo;
+import com.zksy.reservationsystem.util.holder.StudentPoHolder;
+import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +19,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -72,7 +77,7 @@ public class AopLog {
     /**
      * 切入点
      */
-    @Pointcut("execution(public * com.ihbut.checkinsystemnew.controller.*Controller.*(..))")
+    @Pointcut("execution(public * com.zksy.reservationsystem.controller.*Controller.*(..)) && !execution(public * com.zksy.reservationsystem.controller.AuthController.*(..))")
     public void log() {
 
     }
@@ -106,13 +111,19 @@ public class AopLog {
                         point.getSignature().getName()))
                 .httpMethod(request.getMethod())
                 .requestParams(getNameAndValue(point))
-                .result(result)
+//                .result(result)
                 .timeCost(System.currentTimeMillis() - startTime)
                 .userAgent(header)
                 .browser(userAgent.getBrowser().toString())
                 .os(userAgent.getOperatingSystem().toString()).build();
 
-        log.info("Request Log Info : {}", JSONUtil.toJsonStr(l));
+        StudentPo studentPo = StudentPoHolder.getStudentPo();
+        TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
+        if (!ObjectUtils.isEmpty(studentPo)) {
+            log.info("{} - Request Log Info : {}", studentPo.getStudentId(), JSONUtil.toJsonStr(l));
+        } else {
+            log.info("{} - Request Log Info : {}", teacherPo.getJobId(), JSONUtil.toJsonStr(l));
+        }
 
         return result;
     }
