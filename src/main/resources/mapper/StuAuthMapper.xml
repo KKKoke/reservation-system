@@ -5,6 +5,7 @@
         select id, uname, passwd, is_deleted
         from stu_auth
         where uname = #{studentId}
+          and is_deleted = 0
     </select>
 
     <resultMap id="stuAuthPoMap" type="com.zksy.reservationsystem.domain.po.StuAuthPo">

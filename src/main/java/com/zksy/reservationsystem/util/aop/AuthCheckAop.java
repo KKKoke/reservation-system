@@ -3,6 +3,7 @@ package com.zksy.reservationsystem.util.aop;
 import cn.hutool.core.util.ArrayUtil;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.exception.BizException;
+import com.zksy.reservationsystem.util.constant.TeacherConstant;
 import com.zksy.reservationsystem.util.holder.StudentPoHolder;
 import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Aspect
 @Component
@@ -33,10 +35,18 @@ public class AuthCheckAop {
     }
 
     @Before("@annotation(com.zksy.reservationsystem.util.annotation.AuthTeacher)")
-    public void authCheckForAdmin(JoinPoint joinPoint) {
+    public void authCheckForTeacher(JoinPoint joinPoint) {
         boolean authAdmin = isAuthTeacher((ProceedingJoinPoint) joinPoint);
         if (!authAdmin) {
             throw new BizException(ResultCode.FORBIDDEN, "非法请求，该接口只允许老师访问");
+        }
+    }
+
+    @Before("@annotation(com.zksy.reservationsystem.util.annotation.AuthAdmin)")
+    public void authCheckForAdmin(JoinPoint joinPoint) {
+        boolean authAdmin = isAuthAdmin((ProceedingJoinPoint) joinPoint);
+        if (!authAdmin) {
+            throw new BizException(ResultCode.FORBIDDEN, "非法请求，该接口只允许管理员访问");
         }
     }
 
@@ -77,5 +87,12 @@ public class AuthCheckAop {
      */
     private boolean isAuthTeacher(ProceedingJoinPoint point) {
         return !ObjectUtils.isEmpty(TeacherPoHolder.getTeacherPo());
+    }
+
+    /**
+     * 判断是否是管理员
+     */
+    private boolean isAuthAdmin(ProceedingJoinPoint point) {
+        return Objects.equals(TeacherPoHolder.getTeacherPo().getType(), TeacherConstant.ADMIN);
     }
 }

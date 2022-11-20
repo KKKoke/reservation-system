@@ -5,12 +5,14 @@
         select id, name, student_id, contact
         from student
         where student_id = #{studentId}
+          and is_deleted = 0
     </select>
 
     <select id="queryStudentPoByStudentId" resultMap="studentPoMap">
         select id, name, student_id, contact, is_deleted
         from student
         where student_id = #{studentId}
+          and is_deleted = 0
     </select>
 
     <resultMap id="studentPoMap" type="com.zksy.reservationsystem.domain.po.StudentPo">

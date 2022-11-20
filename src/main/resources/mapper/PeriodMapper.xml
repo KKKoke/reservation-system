@@ -23,7 +23,7 @@
     </select>
 
     <select id="queryPeriodPoByPeriodId" resultMap="periodPoMap">
-        select id, start_time, end_time, teacher_id
+        select id, start_time, end_time, teacher_id, is_reserved, stu_id
         from `period`
         where id = #{periodId}
     </select>
@@ -39,5 +39,7 @@
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="teacherId" column="teacher_id"/>
+        <result property="isReserved" column="is_reserved"/>
+        <result property="stuId" column="stu_id"/>
     </resultMap>
 </mapper>
