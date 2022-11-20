@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.PeriodDao">
+    <insert id="insertPeriod">
+        insert
+        period(start_time, end_time, teacher_id) values (
+        #{startTime},
+        #{endTime},
+        #{teacherId}
+        )
+    </insert>
+
+    <delete id="deletePeriod" parameterType="integer">
+        delete
+        from `period`
+        where id = #{periodId}
+    </delete>
+
+    <select id="queryPeriodDtoListByTeacherId" resultMap="periodDtoMap">
+        select id, start_time, end_time
+        from period
+        where teacher_id = #{teacherId}
+    </select>
+
+    <select id="queryPeriodPoByPeriodId" resultMap="periodPoMap">
+        select id, start_time, end_time, teacher_id
+        from `period`
+        where id = #{periodId}
+    </select>
+
+    <resultMap id="periodDtoMap" type="com.zksy.reservationsystem.domain.dto.PeriodDto">
+        <id property="id" column="id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+    </resultMap>
+
+    <resultMap id="periodPoMap" type="com.zksy.reservationsystem.domain.po.PeriodPo">
+        <id property="id" column="id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="teacherId" column="teacher_id"/>
+    </resultMap>
+</mapper>

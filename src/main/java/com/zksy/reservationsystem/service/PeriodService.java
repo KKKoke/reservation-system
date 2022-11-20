@@ -1,19 +1,16 @@
-package com.zksy.reservationsystem.dao;
+package com.zksy.reservationsystem.service;
 
 import com.zksy.reservationsystem.domain.dto.PeriodDto;
-import com.zksy.reservationsystem.domain.po.PeriodPo;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 /**
- * 空闲时间段数据库连接类
+ * 空闲时间段服务层
  *
  * @author kkkoke
  * @since 2022/11/20
  */
-@Mapper
-public interface PeriodDao {
+public interface PeriodService {
 
     /**
      * 添加空闲时间段
@@ -29,9 +26,4 @@ public interface PeriodDao {
      * 根据时间段id删除对应的空闲时间段
      */
     Boolean deletePeriod(Integer periodId);
-
-    /**
-     * 通过空闲时间段id查找空时间段
-     */
-    PeriodPo queryPeriodPoByPeriodId(Integer periodId);
 }
