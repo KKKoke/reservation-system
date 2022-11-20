@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,5 +76,26 @@ public class AuthController {
         resultMap.put("tokenHeader", tokenHeader);
         resultMap.put("teacher", teacherDto);
         return CommonResult.success(resultMap);
+    }
+
+    /**
+     * 刷新 token
+     */
+    @PostMapping("/refreshToken")
+    public CommonResult<?> refresh(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString) {
+        return CommonResult.success(jwtService.refreshToken(tokenAuthString), "refresh success");
+    }
+
+    /**
+     * 判断 token 是否过期
+     */
+    @PostMapping("/isTokenExpired")
+    public CommonResult<?> isTokenExpired(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString) {
+        String[] auths = tokenAuthString.split(" ");
+        boolean tokenExpired = jwtService.isTokenExpired(auths[1]);
+        if (tokenExpired) {
+            return CommonResult.unauthorized();
+        }
+        return CommonResult.success("token未过期");
     }
 }
