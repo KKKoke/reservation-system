@@ -1,5 +1,6 @@
 package com.zksy.reservationsystem.util.constant;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +11,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class JwtConstant {
+
+    @Value("${jwt.tokenHead}")
+    public String TOKEN_HEAD;
+
+    @Value("${jwt.tokenHeader}")
+    public String TOKEN_HEADER;
 
     /**
      * 学生登录类型

@@ -11,7 +11,6 @@ import com.zksy.reservationsystem.util.constant.JwtConstant;
 import com.zksy.reservationsystem.util.holder.StudentPoHolder;
 import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,17 +23,18 @@ import java.util.Objects;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final JwtTokenUtil jwtTokenUtil;
-    private final StudentService studentService;
-    private final TeacherService teacherService;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
 
-    public AuthInterceptor(JwtTokenUtil jwtTokenUtil, StudentService studentService, TeacherService teacherService) {
+    private final StudentService studentService;
+
+    private final TeacherService teacherService;
+
+    private final JwtConstant jwtConstant;
+
+    public AuthInterceptor(JwtTokenUtil jwtTokenUtil, StudentService studentService, TeacherService teacherService, JwtConstant jwtConstant) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.studentService = studentService;
         this.teacherService = teacherService;
+        this.jwtConstant = jwtConstant;
     }
 
     /**
@@ -44,9 +44,9 @@ public class AuthInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String authHeader = request.getHeader(tokenHeader);
-        if (authHeader != null && authHeader.startsWith(tokenHead)) {
-            String authToken = authHeader.substring(tokenHead.length()); // The part after "Bearer "
+        String authHeader = request.getHeader(jwtConstant.TOKEN_HEADER);
+        if (authHeader != null && authHeader.startsWith(jwtConstant.TOKEN_HEAD)) {
+            String authToken = authHeader.substring(jwtConstant.TOKEN_HEAD.length()); // The part after "Bearer "
             if (jwtTokenUtil.validateToken(authToken)) {
                 String username = jwtTokenUtil.getUserNameFromToken(authToken);
                 String type = jwtTokenUtil.getClaimTypeFromToken(authToken); // 获取登录类型
@@ -65,7 +65,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 throw new BizException(ResultCode.UNAUTHORIZED);
             }
         } else {
-            throw new BizException(ResultCode.FAILED, "非法token格式");
+            throw new BizException(ResultCode.FORBIDDEN, "非法token格式，请登录之后再访问");
         }
         return true;
     }
