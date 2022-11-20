@@ -2,6 +2,7 @@ package com.zksy.reservationsystem.util.aop;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.zksy.reservationsystem.common.ResultCode;
+import com.zksy.reservationsystem.domain.po.TeacherPo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.util.constant.TeacherConstant;
 import com.zksy.reservationsystem.util.holder.StudentPoHolder;
@@ -93,6 +94,7 @@ public class AuthCheckAop {
      * 判断是否是管理员
      */
     private boolean isAuthAdmin(ProceedingJoinPoint point) {
-        return Objects.equals(TeacherPoHolder.getTeacherPo().getType(), TeacherConstant.ADMIN);
+        TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
+        return !ObjectUtils.isEmpty(teacherPo) && Objects.equals(teacherPo.getType(), TeacherConstant.ADMIN);
     }
 }

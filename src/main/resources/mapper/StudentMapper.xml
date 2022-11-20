@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zksy.reservationsystem.dao.StudentDao">
+    <insert id="insertStudent">
+        insert
+        student(`name`, student_id, contact) value (
+        #{name},
+        #{studentId},
+        #{contact}
+        )
+    </insert>
+
+    <update id="deleteStudent">
+        update student
+        set is_deleted = 1
+        where student_id = #{studentId}
+    </update>
+
     <select id="queryStudentDtoByStudentId" resultMap="studentDtoMap">
-        select id, name, student_id, contact
+        select id, `name`, student_id, contact
         from student
         where student_id = #{studentId}
           and is_deleted = 0
     </select>
 
     <select id="queryStudentPoByStudentId" resultMap="studentPoMap">
-        select id, name, student_id, contact, is_deleted
+        select id, `name`, student_id, contact, is_deleted
         from student
         where student_id = #{studentId}
           and is_deleted = 0
+    </select>
+
+    <select id="queryStudentDtoList" resultMap="studentDtoMap">
+        select id, `name`, student_id, contact
+        from student
+        where is_deleted = 0
     </select>
 
     <resultMap id="studentPoMap" type="com.zksy.reservationsystem.domain.po.StudentPo">
