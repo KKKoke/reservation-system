@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zksy.reservationsystem.dao.TeaAuthDao">
+    <insert id="insertTeaAuth">
+        insert
+        tea_auth(uname, passwd) values (
+        #{uname},
+        #{passwd}
+        )
+    </insert>
+
+    <update id="deleteTeaAuth">
+        update tea_auth
+        set is_deleted = 1
+        where uname = #{jobId}
+    </update>
+
     <select id="queryTeaAuthPoByJobId" resultMap="teaAuthPoMap">
         select id, uname, passwd, is_deleted
         from tea_auth
         where uname = #{jobId}
+          and is_deleted = 0
     </select>
 
     <resultMap id="teaAuthPoMap" type="com.zksy.reservationsystem.domain.po.TeaAuthPo">
