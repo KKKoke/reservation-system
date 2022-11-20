@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 老师控制层
+ *
+ * @author kkkoke
+ * @since 2022/11/20
+ */
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +32,7 @@ public class TeacherController {
     @AuthAdmin
     @PostMapping("/insertTeacher")
     public CommonResult<?> insertTeacher(@NotBlank(message = "name can not be null") String name, @NotBlank(message = "jobId can not be null") String jobId,
-                                         @NotBlank(message = "password can not be null") String password, String contact) {
+                                         @NotBlank(message = "password can not be null") String password, @NotBlank(message = "contact can not be null") String contact) {
         if (teacherService.insertTeacher(name, jobId, password, contact)) {
             return CommonResult.success();
         }
@@ -56,7 +62,7 @@ public class TeacherController {
     /**
      * 通过工号获取老师信息
      */
-    @GetMapping("/queryTeacherDtoByJobId")
+    @GetMapping("/queryTeacherByJobId")
     public CommonResult<?> queryTeacherDtoByJobId(@NotBlank(message = "jobId can not be null") String jobId) {
         return CommonResult.success(teacherService.queryTeacherDtoByJobId(jobId));
     }

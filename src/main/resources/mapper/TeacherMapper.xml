@@ -17,21 +17,21 @@
     </update>
 
     <select id="queryTeacherDtoByJobId" resultMap="teacherDtoMap">
-        select id, name, job_id, contact, type
+        select id, `name`, job_id, contact, `type`
         from teacher
         where job_id = #{jobId}
           and is_deleted = 0
     </select>
 
     <select id="queryTeacherPoByJobId" resultType="com.zksy.reservationsystem.domain.po.TeacherPo">
-        select id, name, job_id, contact, type, is_deleted
+        select id, `name`, job_id, contact, `type`, is_deleted
         from teacher
         where job_id = #{jobId}
           and is_deleted = 0
     </select>
 
     <select id="queryTeacherDtoList" resultMap="teacherDtoMap">
-        select id, name, job_id, contact, type
+        select id, `name`, job_id, contact, `type`
         from teacher
         where is_deleted = 0
     </select>

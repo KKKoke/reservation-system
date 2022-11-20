@@ -16,4 +16,14 @@ public interface StuAuthDao {
      * 通过工号获取老师认证信息
      */
     StuAuthPo queryStuAuthPoByStudentId(String studentId);
+
+    /**
+     * 新增学生认证信息
+     */
+    Boolean insertStuAuth(String uname, String passwd);
+
+    /**
+     * 删除学生认证信息
+     */
+    Boolean deleteStuAuth(String studentId);
 }
