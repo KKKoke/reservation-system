@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * 统一异常处理
  *
@@ -27,6 +29,19 @@ public class GlobalExceptionHandler {
     public CommonResult<?> bizExceptionHandler(BizException e) {
         log.info("BizException.errorMsg:{}", e.getMessage());
         return CommonResult.failed(e.getErrorCode(), e.getMessage());
+    }
+
+    /**
+     * 参数错误
+     *
+     * @param e 异常
+     * @return ApiResult
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public CommonResult<?> constraintViolationException(ConstraintViolationException e) {
+        log.info("ConstraintViolationException.errMsg:{}", e.getMessage());
+        return CommonResult.failed(ResultCode.VALIDATE_FAILED, e.getMessage());
     }
 
     /**
