@@ -26,4 +26,10 @@ public class PeriodPo {
 
     /** 所属老师id */
     private Integer teacherId;
+
+    /** 是否被预约 */
+    private Integer isReserved;
+
+    /** 预约的学生id */
+    private Integer stuId;
 }
