@@ -26,8 +26,8 @@ public class PeriodServiceImpl implements PeriodService {
 
     @Override
     public Boolean insertPeriod(String startTime, String endTime, Integer teacherId) {
-        // 不能添加别的老师的空闲时间
-        return Objects.equals(TeacherPoHolder.getTeacherPo().getId(), teacherId) && periodDao.insertPeriod(startTime, endTime, teacherId);
+        return Objects.equals(TeacherPoHolder.getTeacherPo().getId(), teacherId)  // 不能添加别的老师的空闲时间
+                && periodDao.insertPeriod(startTime, endTime, teacherId);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PeriodServiceImpl implements PeriodService {
     @Override
     public Boolean deletePeriod(Integer periodId) {
         PeriodPo periodPo = periodDao.queryPeriodPoByPeriodId(periodId);
-        return !ObjectUtils.isEmpty(periodDao.queryPeriodPoByPeriodId(periodId))
+        return !ObjectUtils.isEmpty(periodPo)
                 && Objects.equals(TeacherPoHolder.getTeacherPo().getId(), periodPo.getTeacherId()) && periodDao.deletePeriod(periodId);
     }
 }

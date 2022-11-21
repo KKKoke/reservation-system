@@ -23,7 +23,7 @@
           and is_deleted = 0
     </select>
 
-    <select id="queryTeacherPoByJobId" resultType="com.zksy.reservationsystem.domain.po.TeacherPo">
+    <select id="queryTeacherPoByJobId" resultMap="teacherPoMap">
         select id, `name`, job_id, contact, `type`, is_deleted
         from teacher
         where job_id = #{jobId}

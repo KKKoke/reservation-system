@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.CommonPeriodDao">
+    <insert id="insertCommonPeriod">
+        insert
+        common_period (start_timestamp, end_timestamp, teacher_id)
+        values (
+        #{startTimestamp},
+        #{endTimestamp},
+        #{teacherId}
+        )
+    </insert>
+
+    <delete id="deleteCommonPeriod">
+        delete
+        from common_period
+        where id = #{comPeriodId}
+    </delete>
+
+    <select id="queryCommonPeriodPoListByTeacherId" resultMap="commonPeriodPoMap">
+        select id, start_timestamp, end_timestamp, teacher_id
+        from common_period
+        where teacher_id = #{teacherId}
+    </select>
+
+    <select id="queryCommonPeriodPoByComPeriodId" resultMap="commonPeriodPoMap">
+        select id, start_timestamp, end_timestamp, teacher_id
+        from common_period
+        where id = #{comPeriodId}
+    </select>
+
+    <resultMap id="commonPeriodPoMap" type="com.zksy.reservationsystem.domain.po.CommonPeriodPo">
+        <id property="id" column="id"/>
+        <result property="startTimestamp" column="start_timestamp"/>
+        <result property="endTimestamp" column="end_timestamp"/>
+        <result property="teacherId" column="teacher_id"/>
+    </resultMap>
+</mapper>
