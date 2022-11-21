@@ -121,8 +121,10 @@ public class AopLog {
         TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
         if (!ObjectUtils.isEmpty(studentPo)) {
             log.info("{} - Request Log Info : {}", studentPo.getStudentId(), JSONUtil.toJsonStr(l));
-        } else {
+        } else if (!ObjectUtils.isEmpty(teacherPo)) {
             log.info("{} - Request Log Info : {}", teacherPo.getJobId(), JSONUtil.toJsonStr(l));
+        } else {
+            log.info("Request Log Info : {}", JSONUtil.toJsonStr(l));
         }
 
         return result;
