@@ -1,18 +1,16 @@
-package com.zksy.reservationsystem.dao;
+package com.zksy.reservationsystem.service;
 
 import com.zksy.reservationsystem.domain.po.ReserveTypePo;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 /**
- * 访谈类型数据库连接类
+ * 访谈类型服务层
  *
  * @author kkkoke
- * @since 2022/11/20
+ * @since 2022/11/21
  */
-@Mapper
-public interface ReserveTypeDao {
+public interface ReserveTypeService {
 
     /**
      * 添加访谈类型选项

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.ReserveTypeDao">
+    <insert id="insertReserveType">
+        insert
+        reserve_type(type) value (
+        #{type}
+        )
+    </insert>
+
+    <delete id="deleteReserveType">
+        delete
+        from reserve_type
+        where id = #{typeId}
+    </delete>
+
+    <select id="queryReserveTypeList" resultMap="reserveTypePoMap">
+        select id, `type`
+        from reserve_type
+    </select>
+
+    <select id="queryReserveTypeByTypeId" resultMap="reserveTypePoMap">
+        select id, `type`
+        from reserve_type
+        where id = #{typeId}
+    </select>
+
+    <resultMap id="reserveTypePoMap" type="com.zksy.reservationsystem.domain.po.ReserveTypePo">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+    </resultMap>
+</mapper>
