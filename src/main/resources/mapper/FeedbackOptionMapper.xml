@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.FeedbackOptionDao">
+    <insert id="insertFeedbackOption">
+        insert
+        stu_feedback_option(`option`) value (
+        #{option}
+        )
+    </insert>
+
+    <delete id="deleteFeedbackOption">
+        delete
+        from stu_feedback_option
+        where id = #{optionId}
+    </delete>
+
+    <select id="queryFeedbackOptionList" resultMap="feedbackOptionPoMap">
+        select id, `option`
+        from stu_feedback_option
+    </select>
+
+    <select id="queryFeedbackOptionByOptionId" resultMap="feedbackOptionPoMap">
+        select id, `option`
+        from stu_feedback_option
+        where id = #{optionId}
+    </select>
+
+
+    <resultMap id="feedbackOptionPoMap" type="com.zksy.reservationsystem.domain.po.FeedbackOptionPo">
+        <id property="id" column="id"/>
+        <result property="option" column="option"/>
+    </resultMap>
+</mapper>

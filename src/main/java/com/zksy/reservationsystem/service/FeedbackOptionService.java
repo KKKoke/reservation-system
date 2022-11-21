@@ -1,18 +1,16 @@
-package com.zksy.reservationsystem.dao;
+package com.zksy.reservationsystem.service;
 
 import com.zksy.reservationsystem.domain.po.FeedbackOptionPo;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 /**
- * 学生反馈内容选项数据库连接类
+ * 学生反馈选项服务层
  *
  * @author kkkoke
- * @since 2022/11/20
+ * @since 2022/11/21
  */
-@Mapper
-public interface FeedbackOptionDao {
+public interface FeedbackOptionService {
 
     /**
      * 添加学生反馈选项
