@@ -36,5 +36,5 @@ public interface TeacherService {
     /**
      * 获取老师列表
      */
-    List<TeacherDto> queryTeacherDtoList();
+    List<TeacherDto> queryTeacherDtoList(String name, String jobId);
 }

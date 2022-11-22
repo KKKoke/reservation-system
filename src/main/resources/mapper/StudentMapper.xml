@@ -33,7 +33,15 @@
     <select id="queryStudentDtoList" resultMap="studentDtoMap">
         select id, `name`, student_id, contact
         from student
-        where is_deleted = 0
+        <where>
+            is_deleted = 0
+            <if test="name != null and name != ''">
+                and `name` like concat('%', #{name}, '%')
+            </if>
+            <if test="studentId != null and studentId != ''">
+                and student_id like concat('%', #{studentId}, '%')
+            </if>
+        </where>
     </select>
 
     <resultMap id="studentPoMap" type="com.zksy.reservationsystem.domain.po.StudentPo">
