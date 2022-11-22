@@ -42,4 +42,9 @@ public interface ReserveRecordService {
      * 学生取消访谈预约
      */
     Boolean cancelReserveRecord(Integer recordId);
+
+    /**
+     * 获取访谈列表
+     */
+    List<ReserveRecordDto> queryReserveRecordDtoList();
 }

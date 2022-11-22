@@ -55,6 +55,14 @@ public class ReserveRecordController {
     }
 
     /**
+     * 获取访谈列表
+     */
+    @GetMapping("/queryReserveRecordList")
+    public CommonResult<?> queryReserveRecordDtoList() {
+        return CommonResult.success(reserveRecordService.queryReserveRecordDtoList());
+    }
+
+    /**
      * 老师审核访谈预约
      */
     @AuthTeacher
