@@ -32,4 +32,9 @@ public interface ReserveRecordService {
      * 老师审核访谈预约
      */
     Boolean checkReserveRecord(Integer recordId, Integer status, String rejectReason);
+
+    /**
+     * 访谈结束后填写反馈
+     */
+    Boolean submitFeedback(Integer recordId, String feedback);
 }

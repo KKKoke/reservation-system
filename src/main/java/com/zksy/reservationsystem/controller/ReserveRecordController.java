@@ -59,9 +59,21 @@ public class ReserveRecordController {
      */
     @AuthTeacher
     @PostMapping("/checkReserveRecord")
-    public CommonResult<?> checkReserveRecord(@NotNull(message = "recordId can not be null")Integer recordId,
-                                              @NotNull(message = "status can not be null")Integer status, String rejectReason) {
+    public CommonResult<?> checkReserveRecord(@NotNull(message = "recordId can not be null") Integer recordId,
+                                              @NotNull(message = "status can not be null") Integer status, String rejectReason) {
         if (reserveRecordService.checkReserveRecord(recordId, status, rejectReason)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
+
+    /**
+     * 访谈结束后填写反馈
+     */
+    @PostMapping("/submitFeedback")
+    public CommonResult<?> submitFeedback(@NotNull(message = "recordId can not be null") Integer recordId,
+                                          @NotBlank(message = "feedback can not be null") String feedback) {
+        if (reserveRecordService.submitFeedback(recordId, feedback)) {
             return CommonResult.success();
         }
         return CommonResult.failed();

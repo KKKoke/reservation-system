@@ -3,14 +3,13 @@ package com.zksy.reservationsystem.service.impl;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.*;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
-import com.zksy.reservationsystem.domain.po.PeriodPo;
-import com.zksy.reservationsystem.domain.po.ReserveRecordPo;
-import com.zksy.reservationsystem.domain.po.ReserveTypePo;
+import com.zksy.reservationsystem.domain.po.*;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.ReserveRecordService;
 import com.zksy.reservationsystem.util.common.BeanConvertor;
 import com.zksy.reservationsystem.util.constant.ReserveConstant;
+import com.zksy.reservationsystem.util.holder.StudentPoHolder;
 import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -112,13 +111,36 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
             if (ObjectUtils.isEmpty(rejectReason)) {
                 throw new BizException(ResultCode.VALIDATE_FAILED, "请说明拒绝理由");
             }
-            reserveRecordDao.updateStatus(recordId, status);
-            reserveRecordDao.updateRejectReason(recordId, rejectReason);
-            periodDao.updateIsReservedAndStudentId(reserveRecordPo.getPeriodId(), 0, null);
+            return reserveRecordDao.updateStatus(recordId, status)
+                    && reserveRecordDao.updateRejectReason(recordId, rejectReason)
+                    && periodDao.updateIsReservedAndStudentId(reserveRecordPo.getPeriodId(), 0, null);
         } else {
             throw new BizException(ResultCode.VALIDATE_FAILED, "不合法的状态值");
         }
-        return true;
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public Boolean submitFeedback(Integer recordId, String feedback) {
+        ReserveRecordPo reserveRecordPo = reserveRecordDao.queryReserveRecordPoByRecordId(recordId);
+        if (ObjectUtils.isEmpty(reserveRecordPo)) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "该访谈记录不存在");
+        }
+        if (Objects.equals(reserveRecordPo.getStatus(), 3)) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "被拒绝的访谈不能填写反馈");
+        }
+        TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
+        StudentPo studentPo = StudentPoHolder.getStudentPo();
+        if (!ObjectUtils.isEmpty(teacherPo) && Objects.equals(teacherPo.getJobId(), reserveRecordPo.getJobId())) {
+            return reserveRecordDao.updateTeaFeedback(recordId, feedback)
+                    && reserveRecordDao.updateStatus(recordId, ReserveConstant.ENDED);
+        } else if (!ObjectUtils.isEmpty(studentPo) && Objects.equals(studentPo.getStudentId(), reserveRecordPo.getStudentId())) {
+            return reserveRecordDao.updateStuFeedback(recordId, feedback)
+                    && reserveRecordDao.updateStatus(recordId, ReserveConstant.ENDED);
+        } else {
+            return false;
+        }
     }
 
     private Boolean isReserveTypeJsonStrValid(String reserveTypeJsonStr) {
