@@ -24,7 +24,7 @@
     </delete>
 
     <select id="queryPeriodDtoListByJobId" resultMap="periodDtoMap">
-        select id, start_time, end_time
+        select id, start_time, end_time, is_reserved
         from period
         where job_id = #{jobId}
         order by start_time
@@ -41,6 +41,7 @@
         <id property="id" column="id"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
+        <result property="isReserved" column="is_reserved"/>
     </resultMap>
 
     <resultMap id="periodPoMap" type="com.zksy.reservationsystem.domain.po.PeriodPo">
