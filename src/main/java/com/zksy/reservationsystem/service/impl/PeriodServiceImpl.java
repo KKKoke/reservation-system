@@ -39,6 +39,7 @@ public class PeriodServiceImpl implements PeriodService {
     public Boolean deletePeriod(Integer periodId) {
         PeriodPo periodPo = periodDao.queryPeriodPoByPeriodId(periodId);
         return !ObjectUtils.isEmpty(periodPo)
-                && Objects.equals(TeacherPoHolder.getTeacherPo().getId(), periodPo.getJobId()) && periodDao.deletePeriod(periodId);
+                && Objects.equals(TeacherPoHolder.getTeacherPo().getJobId(), periodPo.getJobId())
+                && periodDao.deletePeriod(periodId);
     }
 }

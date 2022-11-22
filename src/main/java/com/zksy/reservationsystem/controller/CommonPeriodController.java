@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 常用时间段控制层
+ *
+ * @author kkkoke
+ * @since 2022/11/21
+ */
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -27,19 +33,19 @@ public class CommonPeriodController {
     @AuthTeacher
     @PostMapping("/insertCommonPeriod")
     public CommonResult<?> insertCommonPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime,
-                                              @NotNull(message = "teacherId can not be null") Integer teacherId) {
-        if (commonPeriodService.insertCommonPeriod(startTime, endTime, teacherId)) {
+                                              @NotBlank(message = "jobId can not be null") String jobId) {
+        if (commonPeriodService.insertCommonPeriod(startTime, endTime, jobId)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
     }
 
     /**
-     * 通过老师id获取老师常用空闲时间段列表
+     * 通过老师工号获取老师常用空闲时间段列表
      */
-    @GetMapping("/queryCommonPeriodListByTeacherId")
-    public CommonResult<?> queryCommonPeriodDtoListByTeacherId(@NotNull(message = "teacherId can not be null") Integer teacherId) {
-        return CommonResult.success(commonPeriodService.queryCommonPeriodDtoListByTeacherId(teacherId));
+    @GetMapping("/queryCommonPeriodListByJobId")
+    public CommonResult<?> queryCommonPeriodDtoListByJobId(@NotBlank(message = "jobId can not be null") String jobId) {
+        return CommonResult.success(commonPeriodService.queryCommonPeriodDtoListByJobId(jobId));
     }
 
     /**

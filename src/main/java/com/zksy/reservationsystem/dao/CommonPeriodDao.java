@@ -17,7 +17,7 @@ public interface CommonPeriodDao {
     /**
      * 新增常用空闲时间段
      */
-    Boolean insertCommonPeriod(Long startTimestamp, Long endTimestamp, Integer teacherId);
+    Boolean insertCommonPeriod(Long startTimestamp, Long endTimestamp, String jobId);
 
     /**
      * 删除常用空闲时间段
@@ -25,9 +25,9 @@ public interface CommonPeriodDao {
     Boolean deleteCommonPeriod(Integer comPeriodId);
 
     /**
-     * 通过老师id获取常用时间段列表
+     * 通过老师工号获取常用时间段列表
      */
-    List<CommonPeriodPo> queryCommonPeriodPoListByTeacherId(Integer teacherId);
+    List<CommonPeriodPo> queryCommonPeriodPoListByJobId(String jobId);
 
     /**
      * 通过常用时间段id获取常用时间段

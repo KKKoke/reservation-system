@@ -15,7 +15,7 @@ public interface CommonPeriodService {
     /**
      * 新增常用空闲时间段
      */
-    Boolean insertCommonPeriod(String startTime, String endTime, Integer teacherId);
+    Boolean insertCommonPeriod(String startTime, String endTime, String jobId);
 
     /**
      * 删除常用空闲时间段
@@ -25,7 +25,7 @@ public interface CommonPeriodService {
     /**
      * 通过老师id获取常用时间段列表
      */
-    List<CommonPeriodDto> queryCommonPeriodDtoListByTeacherId(Integer teacherId);
+    List<CommonPeriodDto> queryCommonPeriodDtoListByJobId(String jobId);
 
     /**
      * 通过常用时间段id获取常用时间段

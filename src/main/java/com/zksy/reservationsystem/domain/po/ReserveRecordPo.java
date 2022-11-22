@@ -60,4 +60,7 @@ public class ReserveRecordPo {
 
     /** 是否删除 */
     private Integer isDeleted;
+
+    /** 空闲时间段id */
+    private Integer periodId;
 }
