@@ -2,11 +2,11 @@ package com.zksy.reservationsystem.util.common;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.zksy.reservationsystem.dao.ReserveTypeDao;
+import com.zksy.reservationsystem.dao.StudentDao;
+import com.zksy.reservationsystem.dao.TeacherDao;
 import com.zksy.reservationsystem.domain.dto.CommonPeriodDto;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
-import com.zksy.reservationsystem.domain.po.CommonPeriodPo;
-import com.zksy.reservationsystem.domain.po.ReserveRecordPo;
-import com.zksy.reservationsystem.domain.po.ReserveTypePo;
+import com.zksy.reservationsystem.domain.po.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -18,8 +18,14 @@ public class BeanConvertor {
 
     private static ReserveTypeDao reserveTypeDao;
 
-    public BeanConvertor(ReserveTypeDao reserveTypeDao) {
+    private static TeacherDao teacherDao;
+
+    private static StudentDao studentDao;
+
+    public BeanConvertor(ReserveTypeDao reserveTypeDao, TeacherDao teacherDao, StudentDao studentDao) {
         BeanConvertor.reserveTypeDao = reserveTypeDao;
+        BeanConvertor.teacherDao = teacherDao;
+        BeanConvertor.studentDao = studentDao;
     }
 
     public static CommonPeriodDto commonPeriodPoToCommonPeriodDto(CommonPeriodPo commonPeriodPo) {
@@ -51,7 +57,13 @@ public class BeanConvertor {
         for (Integer typeId : ReserveTypePo.parseReserveType(reserveRecordPo.getReserveType())) {
             reserveTypeList.add(reserveTypeDao.queryReserveTypeByTypeId(typeId).getType());
         }
+        TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordPo.getJobId());
+        StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordPo.getStudentId());
         reserveRecordDto.setReserveTypeList(reserveTypeList);
+        reserveRecordDto.setTeaName(teacherPo.getName());
+        reserveRecordDto.setTeaContact(teacherPo.getContact());
+        reserveRecordDto.setStuName(studentPo.getName());
+        reserveRecordDto.setStuContact(studentPo.getContact());
         return reserveRecordDto;
     }
 }

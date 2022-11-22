@@ -162,6 +162,19 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         }
     }
 
+    @Override
+    public List<ReserveRecordDto> queryReserveRecordDtoList() {
+        TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
+        StudentPo studentPo = StudentPoHolder.getStudentPo();
+        if (!ObjectUtils.isEmpty(studentPo)) {
+            return BeanConvertor.reserveRecordPoListToDtoList(reserveRecordDao.queryReserveRecordPoListByStudentId(studentPo.getStudentId()));
+        } else if (!ObjectUtils.isEmpty(teacherDao)) {
+            return BeanConvertor.reserveRecordPoListToDtoList(reserveRecordDao.queryReserveRecordPoListByJobId(teacherPo.getJobId()));
+        } else {
+            return null;
+        }
+    }
+
     private Boolean isReserveTypeJsonStrValid(String reserveTypeJsonStr) {
         List<Integer> typeIdList = ReserveTypePo.parseReserveType(reserveTypeJsonStr);
         for (Integer typeId : typeIdList) {

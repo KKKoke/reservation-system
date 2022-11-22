@@ -28,9 +28,29 @@ public class ReserveRecordDto {
     private String studentId;
 
     /**
+     * 学生姓名
+     */
+    private String stuName;
+
+    /**
+     * 学生联系方式
+     */
+    private String stuContact;
+
+    /**
      * 工号
      */
     private String jobId;
+
+    /**
+     * 老师姓名
+     */
+    private String teaName;
+
+    /**
+     * 老师联系方式
+     */
+    private String teaContact;
 
     /**
      * 访谈类型
