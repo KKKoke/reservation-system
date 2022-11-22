@@ -64,7 +64,7 @@ public class TimeConvertor {
             dateFormat.format(date);
             String startTime = date.split(" ")[0] + " " + getHM(commonPeriodPo.getStartTimestamp());
             String endTime = date.split(" ")[0] + " " + getHM(commonPeriodPo.getEndTimestamp());
-            commonPeriodDtoList.add(new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getTeacherId()));
+            commonPeriodDtoList.add(new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getJobId()));
         });
         return commonPeriodDtoList;
     }

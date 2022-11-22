@@ -28,24 +28,24 @@ public class CommonPeriodServiceImpl implements CommonPeriodService {
     private final CommonPeriodDao commonPeriodDao;
 
     @Override
-    public Boolean insertCommonPeriod(String startTime, String endTime, Integer teacherId) {
+    public Boolean insertCommonPeriod(String startTime, String endTime, String jobId) {
         Long startTimestamp = TimeConvertor.getValue(startTime);
         Long endTimestamp = TimeConvertor.getValue(endTime);
-        return Objects.equals(TeacherPoHolder.getTeacherPo().getId(), teacherId)  // 不能添加别的老师的常用空闲时间
-                && commonPeriodDao.insertCommonPeriod(startTimestamp, endTimestamp, teacherId);
+        return Objects.equals(TeacherPoHolder.getTeacherPo().getJobId(), jobId)  // 不能添加别的老师的常用空闲时间
+                && commonPeriodDao.insertCommonPeriod(startTimestamp, endTimestamp, jobId);
     }
 
     @Override
     public Boolean deleteCommonPeriod(Integer comPeriodId) {
         CommonPeriodPo commonPeriodPo = commonPeriodDao.queryCommonPeriodPoByComPeriodId(comPeriodId);
         return !ObjectUtils.isEmpty(commonPeriodPo)
-                && Objects.equals(TeacherPoHolder.getTeacherPo().getId(), commonPeriodPo.getTeacherId())
+                && Objects.equals(TeacherPoHolder.getTeacherPo().getJobId(), commonPeriodPo.getJobId())
                 && commonPeriodDao.deleteCommonPeriod(comPeriodId);
     }
 
     @Override
-    public List<CommonPeriodDto> queryCommonPeriodDtoListByTeacherId(Integer teacherId) {
-        List<CommonPeriodPo> commonPeriodPoList = commonPeriodDao.queryCommonPeriodPoListByTeacherId(teacherId);
+    public List<CommonPeriodDto> queryCommonPeriodDtoListByJobId(String jobId) {
+        List<CommonPeriodPo> commonPeriodPoList = commonPeriodDao.queryCommonPeriodPoListByJobId(jobId);
         List<CommonPeriodDto> commonPeriodDtoList = new ArrayList<>();
         commonPeriodPoList.forEach(commonPeriodPo -> {
             commonPeriodDtoList.add(BeanConvertor.commonPeriodPoToCommonPeriodDto(commonPeriodPo));

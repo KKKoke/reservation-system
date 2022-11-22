@@ -24,6 +24,6 @@ public class CommonPeriodDto {
     /** 结束时间 */
     private String endTime;
 
-    /** 老师编号 */
-    private Integer teacherId;
+    /** 老师工号 */
+    private String jobId;
 }

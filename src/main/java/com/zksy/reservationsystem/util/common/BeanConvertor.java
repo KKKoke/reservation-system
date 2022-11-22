@@ -28,7 +28,7 @@ public class BeanConvertor {
         }
         String startTime = TimeConvertor.getHM(commonPeriodPo.getStartTimestamp());
         String endTime = TimeConvertor.getHM(commonPeriodPo.getEndTimestamp());
-        return new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getTeacherId());
+        return new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getJobId());
     }
 
     public static List<ReserveRecordDto> reserveRecordPoListToDtoList(List<ReserveRecordPo> reserveRecordPoList) {

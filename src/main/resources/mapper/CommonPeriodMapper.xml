@@ -3,11 +3,11 @@
 <mapper namespace="com.zksy.reservationsystem.dao.CommonPeriodDao">
     <insert id="insertCommonPeriod">
         insert
-        common_period (start_timestamp, end_timestamp, teacher_id)
+        common_period (start_timestamp, end_timestamp, job_id)
         values (
         #{startTimestamp},
         #{endTimestamp},
-        #{teacherId}
+        #{jobId}
         )
     </insert>
 
@@ -17,14 +17,14 @@
         where id = #{comPeriodId}
     </delete>
 
-    <select id="queryCommonPeriodPoListByTeacherId" resultMap="commonPeriodPoMap">
-        select id, start_timestamp, end_timestamp, teacher_id
+    <select id="queryCommonPeriodPoListByJobId" resultMap="commonPeriodPoMap">
+        select id, start_timestamp, end_timestamp, job_id
         from common_period
-        where teacher_id = #{teacherId}
+        where job_id = #{jobId}
     </select>
 
     <select id="queryCommonPeriodPoByComPeriodId" resultMap="commonPeriodPoMap">
-        select id, start_timestamp, end_timestamp, teacher_id
+        select id, start_timestamp, end_timestamp, job_id
         from common_period
         where id = #{comPeriodId}
     </select>
@@ -33,6 +33,6 @@
         <id property="id" column="id"/>
         <result property="startTimestamp" column="start_timestamp"/>
         <result property="endTimestamp" column="end_timestamp"/>
-        <result property="teacherId" column="teacher_id"/>
+        <result property="jobId" column="job_id"/>
     </resultMap>
 </mapper>

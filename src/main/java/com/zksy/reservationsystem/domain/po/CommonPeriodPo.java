@@ -24,6 +24,6 @@ public class CommonPeriodPo {
     /** 从0点到结束时间的毫秒数 */
     private Long endTimestamp;
 
-    /** 所属老师id */
-    private Integer teacherId;
+    /** 所属老师工号 */
+    private String jobId;
 }
