@@ -143,6 +143,25 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         }
     }
 
+    @Override
+    @Transactional
+    public Boolean cancelReserveRecord(Integer recordId) {
+        ReserveRecordPo reserveRecordPo = reserveRecordDao.queryReserveRecordPoByRecordId(recordId);
+        if (ObjectUtils.isEmpty(reserveRecordPo)) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "该访谈记录不存在");
+        }
+        if (!Objects.equals(reserveRecordPo.getStudentId(), StudentPoHolder.getStudentPo().getStudentId())) {
+            throw new BizException(ResultCode.FAILED, "不能取消别人的访谈预约");
+        }
+        if (Objects.equals(reserveRecordPo.getStatus(), ReserveConstant.TO_BE_REVIEWED)
+                || Objects.equals(reserveRecordPo.getStatus(), ReserveConstant.PASSED)) {
+            return reserveRecordDao.updateStatus(recordId, ReserveConstant.CANCELED)
+                    && periodDao.updateIsReservedAndStudentId(reserveRecordPo.getPeriodId(), 0, null);
+        } else {
+            throw new BizException(ResultCode.FAILED, "错误的状态");
+        }
+    }
+
     private Boolean isReserveTypeJsonStrValid(String reserveTypeJsonStr) {
         List<Integer> typeIdList = ReserveTypePo.parseReserveType(reserveTypeJsonStr);
         for (Integer typeId : typeIdList) {

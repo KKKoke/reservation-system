@@ -52,7 +52,7 @@ public class ReserveRecordPo {
     /** 老师反馈 */
     private String teaFeedback;
 
-    /** 审核状态  1：待审核，2：已通过，3：未通过，4：已结束 */
+    /** 审核状态  1：待审核，2：已通过，3：未通过，4：已结束，5：已取消 */
     private Integer status;
 
     /** 拒绝原因 */

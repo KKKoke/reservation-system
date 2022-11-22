@@ -3,6 +3,7 @@ package com.zksy.reservationsystem.controller;
 import com.zksy.reservationsystem.common.CommonResult;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.service.ReserveRecordService;
+import com.zksy.reservationsystem.util.annotation.AuthStudent;
 import com.zksy.reservationsystem.util.annotation.AuthTeacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +30,6 @@ public class ReserveRecordController {
     /**
      * 新增访谈记录
      */
-    @AuthTeacher
     @PostMapping("/insertReserveRecord")
     public CommonResult<?> insertReserveRecord(@Valid @RequestBody ReserveRecordVo reserveRecordVo) {
         if (reserveRecordService.insertReserveRecord(reserveRecordVo)) {
@@ -74,6 +74,18 @@ public class ReserveRecordController {
     public CommonResult<?> submitFeedback(@NotNull(message = "recordId can not be null") Integer recordId,
                                           @NotBlank(message = "feedback can not be null") String feedback) {
         if (reserveRecordService.submitFeedback(recordId, feedback)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
+
+    /**
+     * 学生取消访谈预约
+     */
+    @AuthStudent
+    @PostMapping("/cancelReserveRecord")
+    public CommonResult<?> cancelReserveRecord(@NotNull(message = "recordId can not be null") Integer recordId) {
+        if (reserveRecordService.cancelReserveRecord(recordId)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
