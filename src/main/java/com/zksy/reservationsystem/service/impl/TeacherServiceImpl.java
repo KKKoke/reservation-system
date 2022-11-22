@@ -66,7 +66,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<TeacherDto> queryTeacherDtoList() {
-        return teacherDao.queryTeacherDtoList();
+    public List<TeacherDto> queryTeacherDtoList(String name, String jobId) {
+        return teacherDao.queryTeacherDtoList(name, jobId);
     }
 }

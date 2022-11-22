@@ -63,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDto> queryStudentDtoList() {
-        return studentDao.queryStudentDtoList();
+    public List<StudentDto> queryStudentDtoList(String name, String studentId) {
+        return studentDao.queryStudentDtoList(name, studentId);
     }
 }

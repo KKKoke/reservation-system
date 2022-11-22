@@ -55,8 +55,8 @@ public class TeacherController {
      * 获取老师列表
      */
     @GetMapping("/queryTeacherList")
-    public CommonResult<?> queryTeacherDtoList() {
-        return CommonResult.success(teacherService.queryTeacherDtoList());
+    public CommonResult<?> queryTeacherDtoList(String name, String jobId) {
+        return CommonResult.success(teacherService.queryTeacherDtoList(name, jobId));
     }
 
     /**

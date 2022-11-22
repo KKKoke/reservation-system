@@ -36,5 +36,5 @@ public interface StudentService {
     /**
      * 获取学生列表
      */
-    List<StudentDto> queryStudentDtoList();
+    List<StudentDto> queryStudentDtoList(String name, String studentId);
 }

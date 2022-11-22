@@ -33,7 +33,15 @@
     <select id="queryTeacherDtoList" resultMap="teacherDtoMap">
         select id, `name`, job_id, contact, `type`
         from teacher
-        where is_deleted = 0
+        <where>
+            is_deleted = 0
+            <if test="name != null and name != ''">
+                and `name` like concat('%', #{name}, '%')
+            </if>
+            <if test="jobId != null and jobId != ''">
+                and job_id like concat('%', #{jobId}, '%')
+            </if>
+        </where>
     </select>
 
     <resultMap id="teacherPoMap" type="com.zksy.reservationsystem.domain.po.TeacherPo">
