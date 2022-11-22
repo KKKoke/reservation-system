@@ -5,6 +5,7 @@ import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,6 +43,19 @@ public class GlobalExceptionHandler {
     public CommonResult<?> constraintViolationException(ConstraintViolationException e) {
         log.info("ConstraintViolationException.errMsg:{}", e.getMessage());
         return CommonResult.failed(ResultCode.VALIDATE_FAILED, e.getMessage());
+    }
+
+    /**
+     * 参数错误
+     *
+     * @param e 异常
+     * @return ApiResult
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public CommonResult<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.info("MethodArgumentNotValidException.errMsg:{}", e.getMessage());
+        return CommonResult.failed(ResultCode.VALIDATE_FAILED);
     }
 
     /**

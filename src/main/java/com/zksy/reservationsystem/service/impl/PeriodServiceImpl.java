@@ -25,20 +25,20 @@ public class PeriodServiceImpl implements PeriodService {
     private final PeriodDao periodDao;
 
     @Override
-    public Boolean insertPeriod(String startTime, String endTime, Integer teacherId) {
-        return Objects.equals(TeacherPoHolder.getTeacherPo().getId(), teacherId)  // 不能添加别的老师的空闲时间
-                && periodDao.insertPeriod(startTime, endTime, teacherId);
+    public Boolean insertPeriod(String startTime, String endTime, String jobId) {
+        return Objects.equals(TeacherPoHolder.getTeacherPo().getJobId(), jobId)  // 不能添加别的老师的空闲时间
+                && periodDao.insertPeriod(startTime, endTime, jobId);
     }
 
     @Override
-    public List<PeriodDto> queryPeriodDtoListByTeacherId(Integer teacherId) {
-        return periodDao.queryPeriodDtoListByTeacherId(teacherId);
+    public List<PeriodDto> queryPeriodDtoListByJobId(String jobId) {
+        return periodDao.queryPeriodDtoListByJobId(jobId);
     }
 
     @Override
     public Boolean deletePeriod(Integer periodId) {
         PeriodPo periodPo = periodDao.queryPeriodPoByPeriodId(periodId);
         return !ObjectUtils.isEmpty(periodPo)
-                && Objects.equals(TeacherPoHolder.getTeacherPo().getId(), periodPo.getTeacherId()) && periodDao.deletePeriod(periodId);
+                && Objects.equals(TeacherPoHolder.getTeacherPo().getId(), periodPo.getJobId()) && periodDao.deletePeriod(periodId);
     }
 }

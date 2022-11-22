@@ -3,12 +3,19 @@
 <mapper namespace="com.zksy.reservationsystem.dao.PeriodDao">
     <insert id="insertPeriod">
         insert
-        period(start_time, end_time, teacher_id) values (
+        `period` (start_time, end_time, job_id) values (
         #{startTime},
         #{endTime},
-        #{teacherId}
+        #{jobId}
         )
     </insert>
+
+    <update id="updateIsReservedAndStudentId">
+        update `period`
+        set is_reserved = #{isReserved},
+            student_id  = #{studentId}
+        where id = #{periodId}
+    </update>
 
     <delete id="deletePeriod" parameterType="integer">
         delete
@@ -16,16 +23,18 @@
         where id = #{periodId}
     </delete>
 
-    <select id="queryPeriodDtoListByTeacherId" resultMap="periodDtoMap">
+    <select id="queryPeriodDtoListByJobId" resultMap="periodDtoMap">
         select id, start_time, end_time
         from period
-        where teacher_id = #{teacherId}
+        where job_id = #{jobId}
+        order by start_time
     </select>
 
     <select id="queryPeriodPoByPeriodId" resultMap="periodPoMap">
-        select id, start_time, end_time, teacher_id, is_reserved, stu_id
+        select id, start_time, end_time, job_id, is_reserved, student_id
         from `period`
         where id = #{periodId}
+        order by start_time
     </select>
 
     <resultMap id="periodDtoMap" type="com.zksy.reservationsystem.domain.dto.PeriodDto">
@@ -38,8 +47,8 @@
         <id property="id" column="id"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
-        <result property="teacherId" column="teacher_id"/>
+        <result property="jobId" column="job_id"/>
         <result property="isReserved" column="is_reserved"/>
-        <result property="stuId" column="stu_id"/>
+        <result property="studentId" column="student_id"/>
     </resultMap>
 </mapper>

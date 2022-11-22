@@ -4,7 +4,7 @@ import com.zksy.reservationsystem.dao.CommonPeriodDao;
 import com.zksy.reservationsystem.domain.dto.CommonPeriodDto;
 import com.zksy.reservationsystem.domain.po.CommonPeriodPo;
 import com.zksy.reservationsystem.service.CommonPeriodService;
-import com.zksy.reservationsystem.util.common.BeanUtil;
+import com.zksy.reservationsystem.util.common.BeanConvertor;
 import com.zksy.reservationsystem.util.common.TimeConvertor;
 import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import lombok.RequiredArgsConstructor;
@@ -48,13 +48,13 @@ public class CommonPeriodServiceImpl implements CommonPeriodService {
         List<CommonPeriodPo> commonPeriodPoList = commonPeriodDao.queryCommonPeriodPoListByTeacherId(teacherId);
         List<CommonPeriodDto> commonPeriodDtoList = new ArrayList<>();
         commonPeriodPoList.forEach(commonPeriodPo -> {
-            commonPeriodDtoList.add(BeanUtil.commonPeriodPoToCommonPeriodDto(commonPeriodPo));
+            commonPeriodDtoList.add(BeanConvertor.commonPeriodPoToCommonPeriodDto(commonPeriodPo));
         });
         return commonPeriodDtoList;
     }
 
     @Override
     public CommonPeriodDto queryCommonPeriodDtoByComPeriodId(Integer comPeriodId) {
-        return BeanUtil.commonPeriodPoToCommonPeriodDto(commonPeriodDao.queryCommonPeriodPoByComPeriodId(comPeriodId));
+        return BeanConvertor.commonPeriodPoToCommonPeriodDto(commonPeriodDao.queryCommonPeriodPoByComPeriodId(comPeriodId));
     }
 }

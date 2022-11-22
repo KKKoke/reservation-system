@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.ReserveRecordDao">
+    <insert id="insertReserveRecord">
+        insert
+        reserve_record (student_id, job_id, reserve_type, comment, start_time, end_time) values (
+        #{reserveRecordVo.studentId},
+        #{reserveRecordVo.jobId},
+        #{reserveRecordVo.reserveType},
+        #{reserveRecordVo.comment},
+        #{startTime},
+        #{endTime}
+        )
+    </insert>
+
+    <update id="deleteReserveRecord">
+        update reserve_record
+        set is_deleted = 1
+        where id = #{recordId}
+    </update>
+
+    <update id="updateStatus">
+        update reserve_record
+        set status = #{status}
+        where id = #{recordId}
+    </update>
+
+    <update id="updateRejectReason">
+        update reserve_record
+        set reject_reason = #{reason}
+        where id = #{recordId}
+    </update>
+
+    <update id="updateStuFeedback">
+        update reserve_record
+        set stu_feedback = #{stuFeedback}
+        where id = #{recordId}
+    </update>
+
+    <update id="updateTeaFeedback">
+        update reserve_record
+        set tea_feedback = #{teaFeedback}
+        where id = #{recordId}
+    </update>
+
+    <select id="queryReserveRecordPoListByJobId" resultMap="reserveRecordPoMap">
+        select id,
+               student_id,
+               job_id,
+               reserve_type,
+               comment,
+               create_time,
+               start_time,
+               end_time,
+               stu_feedback,
+               tea_feedback,
+               status,
+               reject_reason,
+               is_deleted
+        from reserve_record
+        where job_id = #{jobId}
+          and is_deleted = 0
+        order by start_time
+    </select>
+
+    <select id="queryReserveRecordPoListByStudentId" resultMap="reserveRecordPoMap">
+        select id,
+               student_id,
+               job_id,
+               reserve_type,
+               comment,
+               create_time,
+               start_time,
+               end_time,
+               stu_feedback,
+               tea_feedback,
+               status,
+               reject_reason,
+               is_deleted
+        from reserve_record
+        where student_id = #{studentId}
+          and is_deleted = 0
+        order by start_time
+    </select>
+
+    <select id="queryReserveRecordPoByRecordId" resultMap="reserveRecordPoMap">
+        select id,
+               student_id,
+               job_id,
+               reserve_type,
+               comment,
+               create_time,
+               start_time,
+               end_time,
+               stu_feedback,
+               tea_feedback,
+               status,
+               reject_reason,
+               is_deleted
+        from reserve_record
+        where id = #{recordId}
+          and is_deleted = 0
+    </select>
+
+    <resultMap id="reserveRecordPoMap" type="com.zksy.reservationsystem.domain.po.ReserveRecordPo">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="reserveType" column="reserve_type"/>
+        <result property="comment" column="comment"/>
+        <result property="createTime" column="create_time"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="stuFeedback" column="stu_feedback"/>
+        <result property="teaFeedback" column="tea_feedback"/>
+        <result property="status" column="status"/>
+        <result property="rejectReason" column="reject_reason"/>
+        <result property="isDeleted" column="is_deleted"/>
+    </resultMap>
+</mapper>

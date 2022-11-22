@@ -1,11 +1,15 @@
 package com.zksy.reservationsystem.util.common;
 
 import com.zksy.reservationsystem.common.ResultCode;
+import com.zksy.reservationsystem.domain.dto.CommonPeriodDto;
+import com.zksy.reservationsystem.domain.po.CommonPeriodPo;
 import com.zksy.reservationsystem.exception.BizException;
+import org.springframework.util.ObjectUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 时间转换器
@@ -36,7 +40,7 @@ public class TimeConvertor {
     public static Long getValue(String dayTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         try {
-            Date date = dateFormat.parse(dayTime);
+            dateFormat.parse(dayTime);  // 校验日期格式是否合法
             String[] timeSplit = dayTime.split(":");
             System.out.println(timeSplit[0]);
             int hour = Integer.parseInt(timeSplit[0]);
@@ -47,5 +51,21 @@ public class TimeConvertor {
         }
     }
 
-
+    /**
+     * 将一天的时间段数组转化为某天时间段数组
+     */
+    public static List<CommonPeriodDto> dayTimeListToSomeDayTimeList(String date, List<CommonPeriodPo> commonPeriodPoList) {
+        if (ObjectUtils.isEmpty(commonPeriodPoList)) {
+            return null;
+        }
+        List<CommonPeriodDto> commonPeriodDtoList = new ArrayList<>();
+        commonPeriodPoList.forEach(commonPeriodPo -> {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+            dateFormat.format(date);
+            String startTime = date.split(" ")[0] + " " + getHM(commonPeriodPo.getStartTimestamp());
+            String endTime = date.split(" ")[0] + " " + getHM(commonPeriodPo.getEndTimestamp());
+            commonPeriodDtoList.add(new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getTeacherId()));
+        });
+        return commonPeriodDtoList;
+    }
 }

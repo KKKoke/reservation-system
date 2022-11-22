@@ -15,12 +15,12 @@ public interface PeriodService {
     /**
      * 添加空闲时间段
      */
-    Boolean insertPeriod(String startTime, String endTime, Integer teacherId);
+    Boolean insertPeriod(String startTime, String endTime, String jobId);
 
     /**
      * 通过老师id获取老师时间段列表
      */
-    List<PeriodDto> queryPeriodDtoListByTeacherId(Integer teacherId);
+    List<PeriodDto> queryPeriodDtoListByJobId(String jobId);
 
     /**
      * 根据时间段id删除对应的空闲时间段

@@ -24,12 +24,12 @@ public class PeriodPo {
     /** 结束时间 */
     private String endTime;
 
-    /** 所属老师id */
-    private Integer teacherId;
+    /** 所属老师工号 */
+    private String jobId;
 
     /** 是否被预约 */
     private Integer isReserved;
 
-    /** 预约的学生id */
-    private Integer stuId;
+    /** 预约的学生学号 */
+    private String studentId;
 }
