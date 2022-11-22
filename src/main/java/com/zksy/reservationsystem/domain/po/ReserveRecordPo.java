@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 访谈记录
  *
@@ -19,12 +21,15 @@ public class ReserveRecordPo {
     private Integer id;
 
     /** 学号 */
+    @NotBlank(message = "studentId can not be null")
     private String studentId;
 
     /** 工号 */
+    @NotBlank(message = "jobId can not be null")
     private String jobId;
 
     /** 访谈类型，json串 */
+    @NotBlank(message = "reserveType can not be null")
     private String reserveType;
 
     /** 访谈备注 */
@@ -34,9 +39,11 @@ public class ReserveRecordPo {
     private String createTime;
 
     /** 开始时间 */
+    @NotBlank(message = "startTime can not be null")
     private String startTime;
 
     /** 结束时间 */
+    @NotBlank(message = "endTime can not be null")
     private String endTime;
 
     /** 学生反馈 */

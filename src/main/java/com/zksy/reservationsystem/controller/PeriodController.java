@@ -26,19 +26,19 @@ public class PeriodController {
      */
     @AuthTeacher
     @PostMapping("/insertPeriod")
-    public CommonResult<?> insertPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime, @NotNull(message = "teacherId can not be null") Integer teacherId) {
-        if (periodService.insertPeriod(startTime, endTime, teacherId)) {
+    public CommonResult<?> insertPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime, @NotBlank(message = "jobId can not be null") String jobId) {
+        if (periodService.insertPeriod(startTime, endTime, jobId)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
     }
 
     /**
-     * 通过老师id获取老师时间段列表
+     * 通过老师工号获取老师时间段列表
      */
-    @GetMapping("/queryPeriodListByTeacherId")
-    public CommonResult<?> queryPeriodListByTeacherId(@NotNull(message = "teacherId can not be null") Integer teacherId) {
-        return CommonResult.success(periodService.queryPeriodDtoListByTeacherId(teacherId));
+    @GetMapping("/queryPeriodListByJobId")
+    public CommonResult<?> queryPeriodDtoListByJobId(@NotBlank(message = "jobId can not be null") String jobId) {
+        return CommonResult.success(periodService.queryPeriodDtoListByJobId(jobId));
     }
 
     /**

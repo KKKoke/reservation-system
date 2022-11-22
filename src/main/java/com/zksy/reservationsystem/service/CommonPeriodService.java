@@ -1,7 +1,6 @@
 package com.zksy.reservationsystem.service;
 
 import com.zksy.reservationsystem.domain.dto.CommonPeriodDto;
-import com.zksy.reservationsystem.domain.po.CommonPeriodPo;
 
 import java.util.List;
 
