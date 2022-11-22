@@ -3,13 +3,14 @@
 <mapper namespace="com.zksy.reservationsystem.dao.ReserveRecordDao">
     <insert id="insertReserveRecord">
         insert
-        reserve_record (student_id, job_id, reserve_type, comment, start_time, end_time) values (
+        reserve_record (student_id, job_id, reserve_type, comment, start_time, end_time, period_id) values (
         #{reserveRecordVo.studentId},
         #{reserveRecordVo.jobId},
         #{reserveRecordVo.reserveType},
         #{reserveRecordVo.comment},
         #{startTime},
-        #{endTime}
+        #{endTime},
+        #{periodId}
         )
     </insert>
 
@@ -56,7 +57,8 @@
                tea_feedback,
                status,
                reject_reason,
-               is_deleted
+               is_deleted,
+               period_id
         from reserve_record
         where job_id = #{jobId}
           and is_deleted = 0
@@ -76,7 +78,8 @@
                tea_feedback,
                status,
                reject_reason,
-               is_deleted
+               is_deleted,
+               period_id
         from reserve_record
         where student_id = #{studentId}
           and is_deleted = 0
@@ -96,7 +99,8 @@
                tea_feedback,
                status,
                reject_reason,
-               is_deleted
+               is_deleted,
+               period_id
         from reserve_record
         where id = #{recordId}
           and is_deleted = 0
@@ -116,5 +120,6 @@
         <result property="status" column="status"/>
         <result property="rejectReason" column="reject_reason"/>
         <result property="isDeleted" column="is_deleted"/>
+        <result property="periodId" column="period_id"/>
     </resultMap>
 </mapper>

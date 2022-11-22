@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 访谈记录控制层
@@ -54,6 +55,15 @@ public class ReserveRecordController {
     }
 
     /**
-     *
+     * 老师审核访谈预约
      */
+    @AuthTeacher
+    @PostMapping("/checkReserveRecord")
+    public CommonResult<?> checkReserveRecord(@NotNull(message = "recordId can not be null")Integer recordId,
+                                              @NotNull(message = "status can not be null")Integer status, String rejectReason) {
+        if (reserveRecordService.checkReserveRecord(recordId, status, rejectReason)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
 }

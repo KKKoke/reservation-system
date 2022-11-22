@@ -27,4 +27,9 @@ public interface ReserveRecordService {
      * 根据学生学号获取访谈记录列表
      */
     List<ReserveRecordDto> queryReserveRecordDtoListByStudentId(String studentId);
+
+    /**
+     * 老师审核访谈预约
+     */
+    Boolean checkReserveRecord(Integer recordId, Integer status, String rejectReason);
 }

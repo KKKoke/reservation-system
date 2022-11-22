@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 常用时间段控制层
+ *
+ * @author kkkoke
+ * @since 2022/11/21
+ */
 @Validated
 @RestController
 @RequiredArgsConstructor

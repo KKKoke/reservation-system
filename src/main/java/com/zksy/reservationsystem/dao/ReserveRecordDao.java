@@ -18,7 +18,7 @@ public interface ReserveRecordDao {
     /**
      * 新增访谈记录
      */
-    Boolean insertReserveRecord(ReserveRecordVo reserveRecordVo, String startTime, String endTime);
+    Boolean insertReserveRecord(ReserveRecordVo reserveRecordVo, String startTime, String endTime, Integer periodId);
 
     /**
      * 删除访谈记录
