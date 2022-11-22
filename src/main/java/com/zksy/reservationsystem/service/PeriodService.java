@@ -15,7 +15,7 @@ public interface PeriodService {
     /**
      * 添加空闲时间段
      */
-    Boolean insertPeriod(String startTime, String endTime, String jobId);
+    Boolean insertPeriod(String startTime, String endTime);
 
     /**
      * 通过老师id获取老师时间段列表

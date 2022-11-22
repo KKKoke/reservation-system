@@ -26,8 +26,8 @@ public class PeriodController {
      */
     @AuthTeacher
     @PostMapping("/insertPeriod")
-    public CommonResult<?> insertPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime, @NotBlank(message = "jobId can not be null") String jobId) {
-        if (periodService.insertPeriod(startTime, endTime, jobId)) {
+    public CommonResult<?> insertPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime) {
+        if (periodService.insertPeriod(startTime, endTime)) {
             return CommonResult.success();
         }
         return CommonResult.failed();

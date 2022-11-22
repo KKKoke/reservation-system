@@ -32,9 +32,8 @@ public class CommonPeriodController {
      */
     @AuthTeacher
     @PostMapping("/insertCommonPeriod")
-    public CommonResult<?> insertCommonPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime,
-                                              @NotBlank(message = "jobId can not be null") String jobId) {
-        if (commonPeriodService.insertCommonPeriod(startTime, endTime, jobId)) {
+    public CommonResult<?> insertCommonPeriod(@NotBlank(message = "startTime can not be null") String startTime, @NotBlank(message = "endTime can not be null") String endTime) {
+        if (commonPeriodService.insertCommonPeriod(startTime, endTime)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
@@ -63,6 +62,18 @@ public class CommonPeriodController {
     @PostMapping("/deleteCommonPeriod")
     public CommonResult<?> deleteCommonPeriod(@NotNull(message = "comPeriodId can not be null") Integer comPeriodId) {
         if (commonPeriodService.deleteCommonPeriod(comPeriodId)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
+
+    /**
+     * 一键导入常用空闲时间
+     */
+    @AuthTeacher
+    @PostMapping("/importCommonPeriod")
+    public CommonResult<?> importCommonPeriod(@NotBlank(message = "oneTime can not be null") String oneTime) {
+        if (commonPeriodService.importCommonPeriod(oneTime)) {
             return CommonResult.success();
         }
         return CommonResult.failed();

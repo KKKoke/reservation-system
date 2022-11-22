@@ -58,10 +58,14 @@ public class TimeConvertor {
         if (ObjectUtils.isEmpty(commonPeriodPoList)) {
             return null;
         }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        try {
+            dateFormat.parse(date);
+        } catch (ParseException e) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "日期格式不符合");
+        }
         List<CommonPeriodDto> commonPeriodDtoList = new ArrayList<>();
         commonPeriodPoList.forEach(commonPeriodPo -> {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
-            dateFormat.format(date);
             String startTime = date.split(" ")[0] + " " + getHM(commonPeriodPo.getStartTimestamp());
             String endTime = date.split(" ")[0] + " " + getHM(commonPeriodPo.getEndTimestamp());
             commonPeriodDtoList.add(new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getJobId()));
