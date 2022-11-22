@@ -23,4 +23,7 @@ public class PeriodDto {
 
     /** 结束时间 */
     private String endTime;
+
+    /** 是否被预约 */
+    private Integer isReserved;
 }
