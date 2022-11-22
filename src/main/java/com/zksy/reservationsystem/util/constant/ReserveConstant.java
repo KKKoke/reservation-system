@@ -19,4 +19,7 @@ public class ReserveConstant {
 
     /** 访谈预约状态 已结束 */
     public static final Integer ENDED = 4;
+
+    /** 访谈预约状态 已取消 */
+    public static final Integer CANCELED = 5;
 }
