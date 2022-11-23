@@ -17,7 +17,7 @@ public class ReserveConstant {
     /** 访谈预约状态 未通过 */
     public static final Integer NOT_PASSED = 3;
 
-    /** 访谈预约状态 已结束 */
+    /** 访谈预约状态 已完成 */
     public static final Integer ENDED = 4;
 
     /** 访谈预约状态 已取消 */

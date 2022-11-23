@@ -1,15 +1,14 @@
 package com.zksy.reservationsystem.controller;
 
 import com.zksy.reservationsystem.common.CommonResult;
+import com.zksy.reservationsystem.domain.vo.StudentVo;
 import com.zksy.reservationsystem.service.StudentService;
 import com.zksy.reservationsystem.util.annotation.AuthAdmin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -31,9 +30,8 @@ public class StudentController {
      */
     @AuthAdmin
     @PostMapping("/insertStudent")
-    public CommonResult<?> insertStudent(@NotBlank(message = "name can not be null") String name, @NotBlank(message = "studentId can not be null") String studentId,
-                                         @NotBlank(message = "password can not be null") String password, String contact) {
-        if (studentService.insertStudent(name, studentId, password, contact)) {
+    public CommonResult<?> insertStudent(@Valid @RequestBody StudentVo studentVo) {
+        if (studentService.insertStudent(studentVo)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
@@ -55,8 +53,8 @@ public class StudentController {
      * 获取学生列表
      */
     @GetMapping("/queryStudentList")
-    public CommonResult<?> queryStudentDtoList(String name, String studentId) {
-        return CommonResult.success(studentService.queryStudentDtoList(name, studentId));
+    public CommonResult<?> queryStudentDtoList(String name, String studentId, String className, String dormitory) {
+        return CommonResult.success(studentService.queryStudentDtoList(name, studentId, className, dormitory));
     }
 
     /**

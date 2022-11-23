@@ -59,4 +59,9 @@ public interface ReserveRecordDao {
      * 更新老师反馈
      */
     Boolean updateTeaFeedback(Integer recordId, String teaFeedback);
+
+    /**
+     * 根据老师工号获取已完成的访谈记录列表
+     */
+    List<ReserveRecordPo> queryEndedReserveRecordPoListByJobId(String jobId);
 }

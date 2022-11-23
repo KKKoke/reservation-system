@@ -25,7 +25,6 @@
         where id = #{optionId}
     </select>
 
-
     <resultMap id="feedbackOptionPoMap" type="com.zksy.reservationsystem.domain.po.FeedbackOptionPo">
         <id property="id" column="id"/>
         <result property="option" column="option"/>

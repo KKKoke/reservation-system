@@ -58,7 +58,7 @@ public class ReserveRecordDto {
     private List<String> reserveTypeList;
 
     /**
-     * 访谈备注
+     * 访谈备注 情况描述
      */
     private String comment;
 
@@ -83,12 +83,12 @@ public class ReserveRecordDto {
     private String stuFeedback;
 
     /**
-     * 老师反馈
+     * 老师反馈 访谈记录
      */
     private String teaFeedback;
 
     /**
-     * 审核状态  1：待审核，2：已通过，3：未通过，4：已结束
+     * 审核状态  1：待审核，2：已通过，3：未通过，4：已完成，5：已取消
      */
     private Integer status;
 

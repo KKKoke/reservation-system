@@ -28,7 +28,7 @@ public interface StudentDao {
     /**
      * 新增学生
      */
-    Boolean insertStudent(String name, String studentId, String contact);
+    Boolean insertStudent(StudentPo studentPo);
 
     /**
      * 删除学生
@@ -38,5 +38,5 @@ public interface StudentDao {
     /**
      * 获取学生列表
      */
-    List<StudentDto> queryStudentDtoList(String name, String studentId);
+    List<StudentDto> queryStudentDtoList(String name, String studentId, String className, String dormitory);
 }

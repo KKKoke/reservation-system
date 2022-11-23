@@ -127,8 +127,8 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         if (ObjectUtils.isEmpty(reserveRecordPo)) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "该访谈记录不存在");
         }
-        if (Objects.equals(reserveRecordPo.getStatus(), 3)) {
-            throw new BizException(ResultCode.VALIDATE_FAILED, "被拒绝的访谈不能填写反馈");
+        if (!Objects.equals(reserveRecordPo.getStatus(), 2) && !Objects.equals(reserveRecordPo.getStatus(), 4)) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "待审核、被拒绝或者取消的访谈不能填写反馈");
         }
         TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
         StudentPo studentPo = StudentPoHolder.getStudentPo();

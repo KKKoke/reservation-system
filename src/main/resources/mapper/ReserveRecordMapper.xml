@@ -106,6 +106,28 @@
           and is_deleted = 0
     </select>
 
+    <select id="queryEndedReserveRecordPoListByJobId" resultMap="reserveRecordPoMap">
+        select id,
+               student_id,
+               job_id,
+               reserve_type,
+               comment,
+               create_time,
+               start_time,
+               end_time,
+               stu_feedback,
+               tea_feedback,
+               status,
+               reject_reason,
+               is_deleted,
+               period_id
+        from reserve_record
+        where job_id = #{jobId}
+          and is_deleted = 0
+          and status = 4
+        order by start_time
+    </select>
+
     <resultMap id="reserveRecordPoMap" type="com.zksy.reservationsystem.domain.po.ReserveRecordPo">
         <id property="id" column="id"/>
         <result property="studentId" column="student_id"/>

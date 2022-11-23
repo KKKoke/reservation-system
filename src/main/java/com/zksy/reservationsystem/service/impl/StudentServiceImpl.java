@@ -1,10 +1,12 @@
 package com.zksy.reservationsystem.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.StuAuthDao;
 import com.zksy.reservationsystem.dao.StudentDao;
 import com.zksy.reservationsystem.domain.dto.StudentDto;
 import com.zksy.reservationsystem.domain.po.StudentPo;
+import com.zksy.reservationsystem.domain.vo.StudentVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -47,11 +49,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Boolean insertStudent(String name, String studentId, String password, String contact) {
-        if (!ObjectUtils.isEmpty(studentDao.queryStudentPoByStudentId(studentId))) {
+    public Boolean insertStudent(StudentVo studentVo) {
+        if (!ObjectUtils.isEmpty(studentDao.queryStudentPoByStudentId(studentVo.getStudentId()))) {
             throw new BizException(ResultCode.FAILED, "该学生已存在");
         }
-        return studentDao.insertStudent(name, studentId, contact) && stuAuthDao.insertStuAuth(studentId, DigestUtils.md5DigestAsHex(password.getBytes()));
+        return studentDao.insertStudent(BeanUtil.copyProperties(studentVo, StudentPo.class))
+                && stuAuthDao.insertStuAuth(studentVo.getStudentId(), DigestUtils.md5DigestAsHex(studentVo.getPassword().getBytes()));
     }
 
     @Override
@@ -63,7 +66,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDto> queryStudentDtoList(String name, String studentId) {
-        return studentDao.queryStudentDtoList(name, studentId);
+    public List<StudentDto> queryStudentDtoList(String name, String studentId, String className, String dormitory) {
+        return studentDao.queryStudentDtoList(name, studentId, className, dormitory);
     }
 }
