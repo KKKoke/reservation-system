@@ -39,7 +39,7 @@ public interface ReserveRecordService {
     Boolean submitFeedback(Integer recordId, String feedback);
 
     /**
-     * 学生取消访谈预约
+     * 取消访谈预约
      */
     Boolean cancelReserveRecord(Integer recordId);
 

@@ -150,7 +150,13 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         if (ObjectUtils.isEmpty(reserveRecordPo)) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "该访谈记录不存在");
         }
-        if (!Objects.equals(reserveRecordPo.getStudentId(), StudentPoHolder.getStudentPo().getStudentId())) {
+        TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
+        StudentPo studentPo = StudentPoHolder.getStudentPo();
+        if (!ObjectUtils.isEmpty(studentPo) &&
+                !Objects.equals(reserveRecordPo.getStudentId(), studentPo.getStudentId())) {
+            throw new BizException(ResultCode.FAILED, "不能取消别人的访谈预约");
+        } else if (!ObjectUtils.isEmpty(teacherPo) &&
+                !Objects.equals(reserveRecordPo.getJobId(), teacherPo.getJobId())) {
             throw new BizException(ResultCode.FAILED, "不能取消别人的访谈预约");
         }
         if (Objects.equals(reserveRecordPo.getStatus(), ReserveConstant.TO_BE_REVIEWED)
