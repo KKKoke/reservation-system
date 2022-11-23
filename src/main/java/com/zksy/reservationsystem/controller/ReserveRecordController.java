@@ -88,9 +88,8 @@ public class ReserveRecordController {
     }
 
     /**
-     * 学生取消访谈预约
+     * 取消访谈预约
      */
-    @AuthStudent
     @PostMapping("/cancelReserveRecord")
     public CommonResult<?> cancelReserveRecord(@NotNull(message = "recordId can not be null") Integer recordId) {
         if (reserveRecordService.cancelReserveRecord(recordId)) {
