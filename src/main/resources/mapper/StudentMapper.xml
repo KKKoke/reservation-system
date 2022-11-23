@@ -3,10 +3,14 @@
 <mapper namespace="com.zksy.reservationsystem.dao.StudentDao">
     <insert id="insertStudent">
         insert
-        student(`name`, student_id, contact) value (
+        student(`name`, student_id, class_name, gender, contact, parent_contact, dormitory) values (
         #{name},
         #{studentId},
-        #{contact}
+        #{className},
+        #{gender},
+        #{contact},
+        #{parentContact},
+        #{dormitory}
         )
     </insert>
 
@@ -17,21 +21,21 @@
     </update>
 
     <select id="queryStudentDtoByStudentId" resultMap="studentDtoMap">
-        select id, `name`, student_id, contact
+        select id, `name`, student_id, class_name, gender, contact, parent_contact, dormitory
         from student
         where student_id = #{studentId}
           and is_deleted = 0
     </select>
 
     <select id="queryStudentPoByStudentId" resultMap="studentPoMap">
-        select id, `name`, student_id, contact, is_deleted
+        select id, `name`, student_id, class_name, gender, contact, parent_contact, dormitory, is_deleted
         from student
         where student_id = #{studentId}
           and is_deleted = 0
     </select>
 
     <select id="queryStudentDtoList" resultMap="studentDtoMap">
-        select id, `name`, student_id, contact
+        select id, `name`, student_id, class_name, gender, contact, parent_contact, dormitory
         from student
         <where>
             is_deleted = 0
@@ -41,6 +45,12 @@
             <if test="studentId != null and studentId != ''">
                 and student_id like concat('%', #{studentId}, '%')
             </if>
+            <if test="className != null and className != ''">
+                and class_name like concat('%', #{className}, '%')
+            </if>
+            <if test="dormitory != null and dormitory != ''">
+                and dormitory like concat('%', #{dormitory}, '%')
+            </if>
         </where>
     </select>
 
@@ -49,6 +59,11 @@
         <result property="name" column="name"/>
         <result property="studentId" column="student_id"/>
         <result property="contact" column="contact"/>
+        <result property="gender" column="gender"/>
+        <result property="contact" column="contact"/>
+        <result property="parentContact" column="parent_contact"/>
+        <result property="dormitory" column="dormitory"/>
+        <result property="className" column="class_name"/>
         <result property="isDeleted" column="is_deleted"/>
     </resultMap>
 
@@ -57,5 +72,10 @@
         <result property="name" column="name"/>
         <result property="studentId" column="student_id"/>
         <result property="contact" column="contact"/>
+        <result property="gender" column="gender"/>
+        <result property="contact" column="contact"/>
+        <result property="parentContact" column="parent_contact"/>
+        <result property="dormitory" column="dormitory"/>
+        <result property="className" column="class_name"/>
     </resultMap>
 </mapper>

@@ -2,6 +2,7 @@ package com.zksy.reservationsystem.service;
 
 import com.zksy.reservationsystem.domain.dto.StudentDto;
 import com.zksy.reservationsystem.domain.po.StudentPo;
+import com.zksy.reservationsystem.domain.vo.StudentVo;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface StudentService {
     /**
      * 新增学生
      */
-    Boolean insertStudent(String name, String studentId, String password, String contact);
+    Boolean insertStudent(StudentVo studentVo);
 
     /**
      * 删除学生
@@ -36,5 +37,5 @@ public interface StudentService {
     /**
      * 获取学生列表
      */
-    List<StudentDto> queryStudentDtoList(String name, String studentId);
+    List<StudentDto> queryStudentDtoList(String name, String studentId, String className, String dormitory);
 }

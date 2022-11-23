@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zksy.reservationsystem.dao.ExportDao">
+    <select id="queryExportDto" resultMap="exportDtoMap">
+        select rr.student_id,
+               s.name,
+               s.class_name,
+               s.gender,
+               s.contact,
+               s.parent_contact,
+               s.dormitory,
+               reserve_type,
+               comment,
+               start_time,
+               end_time,
+               tea_feedback,
+               stu_feedback
+        from reserve_record rr
+                 join student s on rr.student_id = s.student_id
+        where job_id = #{jobId}
+          and status = 4
+    </select>
+
+    <resultMap id="exportDtoMap" type="com.zksy.reservationsystem.domain.dto.ExportDto">
+        <result property="studentId" column="student_id"/>
+        <result property="name" column="name"/>
+        <result property="className" column="class_name"/>
+        <result property="gender" column="gender"/>
+        <result property="contact" column="contact"/>
+        <result property="parentContact" column="parent_contact"/>
+        <result property="dormitory" column="dormitory"/>
+        <result property="reserveType" column="reserve_type"/>
+        <result property="comment" column="comment"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="teaFeedback" column="tea_feedback"/>
+        <result property="stuFeedback" column="stu_feedback"/>
+    </resultMap>
+</mapper>
