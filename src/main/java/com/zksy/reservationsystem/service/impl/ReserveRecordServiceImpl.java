@@ -104,7 +104,7 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         }
         // 审核通过
         if (Objects.equals(status, ReserveConstant.PASSED)) {
-            reserveRecordDao.updateStatus(recordId, status);
+            return reserveRecordDao.updateStatus(recordId, status);
         }
         // 审核不通过，需要说明拒绝原因
         else if (Objects.equals(status, ReserveConstant.NOT_PASSED)) {
@@ -117,7 +117,6 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         } else {
             throw new BizException(ResultCode.VALIDATE_FAILED, "不合法的状态值");
         }
-        return false;
     }
 
     @Override
