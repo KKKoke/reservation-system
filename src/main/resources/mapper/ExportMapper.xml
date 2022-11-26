@@ -21,6 +21,25 @@
           and status = 4
     </select>
 
+    <select id="queryAllExportDto" resultMap="exportDtoMap">
+        select rr.student_id,
+               s.name,
+               s.class_name,
+               s.gender,
+               s.contact,
+               s.parent_contact,
+               s.dormitory,
+               reserve_type,
+               comment,
+               start_time,
+               end_time,
+               tea_feedback,
+               stu_feedback
+        from reserve_record rr
+                 join student s on rr.student_id = s.student_id
+        where status = 4
+    </select>
+
     <resultMap id="exportDtoMap" type="com.zksy.reservationsystem.domain.dto.ExportDto">
         <result property="studentId" column="student_id"/>
         <result property="name" column="name"/>

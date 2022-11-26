@@ -62,4 +62,21 @@ public class ExportServiceImpl implements ExportService {
         });
         return exportDtoList;
     }
+
+    @Override
+    public List<ExportDto> queryAllExportDto() {
+        List<ExportDto> exportDtoList = exportDao.queryAllExportDto();
+        if (ObjectUtils.isEmpty(exportDtoList)) {
+            throw new BizException(ResultCode.FAILED, "当前没有访谈数据");
+        }
+        exportDtoList.forEach(exportDto -> {
+            StringBuilder reserveType = new StringBuilder();
+            for (Integer typeId : ReserveTypePo.parseReserveType(exportDto.getReserveType())) {
+                reserveType.append(reserveTypeDao.queryReserveTypeByTypeId(typeId).getType());
+                reserveType.append(";");
+            }
+            exportDto.setReserveType(String.valueOf(reserveType));
+        });
+        return exportDtoList;
+    }
 }
