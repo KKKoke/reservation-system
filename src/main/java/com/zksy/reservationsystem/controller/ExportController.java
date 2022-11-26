@@ -40,7 +40,6 @@ public class ExportController {
     /**
      * 导出某个老师访谈数据报表
      */
-    @AuthAdmin
     @GetMapping("/exportRecordOfOneTeacher")
     public void exportRecordOfOneTeacher(@NotBlank(message = "jobId can not be null") String jobId, HttpServletResponse response) throws IOException {
         TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
@@ -48,6 +47,30 @@ public class ExportController {
         List<ExportDto> exportDtoList = exportService.queryExportDto(jobId);
         ExportParams exportParams = new ExportParams("访谈记录报表" + "-" + exportHeadDto.getTeaName() +
                 "-" + exportHeadDto.getJobId(), LocalDateTime.now().toString());
+        exportParams.setSecondTitle("导出人：" + teacherPo.getName() +
+                "  导出时间：" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        exportParams.setTitleHeight((short) 8);
+        exportParams.setHeaderHeight(8);
+        exportParams.setHeight((short) 6);
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, ExportDto.class, exportDtoList);
+        response.setContentType("application/octet-stream");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA_" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + ".xlsx");
+        ServletOutputStream out = response.getOutputStream();
+        workbook.write(out);
+        out.flush();
+    }
+
+    /**
+     * 导出所有老师访谈数据报表
+     */
+    @AuthAdmin
+    @GetMapping("/exportAllRecord")
+    public void exportAllRecord(HttpServletResponse response) throws IOException {
+        TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
+        List<ExportDto> exportDtoList = exportService.queryAllExportDto();
+        ExportParams exportParams = new ExportParams("访谈记录汇总报表", LocalDateTime.now().toString());
         exportParams.setSecondTitle("导出人：" + teacherPo.getName() +
                 "  导出时间：" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         exportParams.setTitleHeight((short) 8);

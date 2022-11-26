@@ -3,7 +3,6 @@ package com.zksy.reservationsystem.controller;
 import com.zksy.reservationsystem.common.CommonResult;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.service.ReserveRecordService;
-import com.zksy.reservationsystem.util.annotation.AuthStudent;
 import com.zksy.reservationsystem.util.annotation.AuthTeacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

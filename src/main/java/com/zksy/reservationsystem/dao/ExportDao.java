@@ -18,4 +18,9 @@ public interface ExportDao {
      * 获取某个老师访谈数据报表
      */
     List<ExportDto> queryExportDto(String jobId);
+
+    /**
+     * 获取所有老师访谈数据报表
+     */
+    List<ExportDto> queryAllExportDto();
 }
