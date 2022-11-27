@@ -62,7 +62,7 @@
         from reserve_record
         where job_id = #{jobId}
           and is_deleted = 0
-        order by start_time
+        order by start_time desc
     </select>
 
     <select id="queryReserveRecordPoListByStudentId" resultMap="reserveRecordPoMap">
@@ -83,7 +83,7 @@
         from reserve_record
         where student_id = #{studentId}
           and is_deleted = 0
-        order by start_time
+        order by start_time desc
     </select>
 
     <select id="queryReserveRecordPoByRecordId" resultMap="reserveRecordPoMap">
@@ -125,7 +125,7 @@
         where job_id = #{jobId}
           and is_deleted = 0
           and status = 4
-        order by start_time
+        order by start_time desc
     </select>
 
     <resultMap id="reserveRecordPoMap" type="com.zksy.reservationsystem.domain.po.ReserveRecordPo">

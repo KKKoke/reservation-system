@@ -21,6 +21,7 @@
         select id, start_timestamp, end_timestamp, job_id
         from common_period
         where job_id = #{jobId}
+        order by start_timestamp
     </select>
 
     <select id="queryCommonPeriodPoByComPeriodId" resultMap="commonPeriodPoMap">
