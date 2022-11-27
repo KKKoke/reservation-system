@@ -27,14 +27,14 @@
         select id, start_time, end_time, is_reserved
         from period
         where job_id = #{jobId}
-        order by start_time
+        order by start_time desc
     </select>
 
     <select id="queryPeriodPoByPeriodId" resultMap="periodPoMap">
         select id, start_time, end_time, job_id, is_reserved, student_id
         from `period`
         where id = #{periodId}
-        order by start_time
+        order by start_time desc
     </select>
 
     <resultMap id="periodDtoMap" type="com.zksy.reservationsystem.domain.dto.PeriodDto">
