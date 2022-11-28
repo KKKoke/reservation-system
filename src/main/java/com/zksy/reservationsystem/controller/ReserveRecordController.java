@@ -41,24 +41,24 @@ public class ReserveRecordController {
      * 根据老师工号获取访谈记录列表
      */
     @GetMapping("/queryRecordListByJobId")
-    public CommonResult<?> queryReserveRecordDtoListByJobId(@NotBlank(message = "jobId can not be null") String jobId) {
-        return CommonResult.success(reserveRecordService.queryReserveRecordDtoListByJobId(jobId));
+    public CommonResult<?> queryReserveRecordDtoListByJobId(@NotBlank(message = "jobId can not be null") String jobId, Integer pageNum, Integer pageSize) {
+        return CommonResult.success(reserveRecordService.queryReserveRecordDtoListByJobId(jobId, pageNum, pageSize));
     }
 
     /**
      * 根据学生学号获取访谈记录列表
      */
     @GetMapping("/queryRecordListByStudentId")
-    public CommonResult<?> queryReserveRecordDtoListByStudentId(@NotBlank(message = "studentId can not be null") String studentId) {
-        return CommonResult.success(reserveRecordService.queryReserveRecordDtoListByStudentId(studentId));
+    public CommonResult<?> queryReserveRecordDtoListByStudentId(@NotBlank(message = "studentId can not be null") String studentId, Integer pageNum, Integer pageSize) {
+        return CommonResult.success(reserveRecordService.queryReserveRecordDtoListByStudentId(studentId, pageNum, pageSize));
     }
 
     /**
      * 获取访谈列表
      */
     @GetMapping("/queryReserveRecordList")
-    public CommonResult<?> queryReserveRecordDtoList() {
-        return CommonResult.success(reserveRecordService.queryReserveRecordDtoList());
+    public CommonResult<?> queryReserveRecordDtoList(Integer pageNum, Integer pageSize) {
+        return CommonResult.success(reserveRecordService.queryReserveRecordDtoList(pageNum, pageSize));
     }
 
     /**
