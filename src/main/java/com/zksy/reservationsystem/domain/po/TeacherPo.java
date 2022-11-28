@@ -24,6 +24,9 @@ public class TeacherPo {
     /** 工号 */
     private String jobId;
 
+    /** 职位 */
+    private String position;
+
     /** 联系方式 */
     private String contact;
 

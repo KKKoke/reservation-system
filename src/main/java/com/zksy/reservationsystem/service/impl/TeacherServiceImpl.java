@@ -1,5 +1,7 @@
 package com.zksy.reservationsystem.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.TeaAuthDao;
 import com.zksy.reservationsystem.dao.TeacherDao;
@@ -7,6 +9,7 @@ import com.zksy.reservationsystem.domain.dto.TeacherDto;
 import com.zksy.reservationsystem.domain.po.TeacherPo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.TeacherService;
+import com.zksy.reservationsystem.util.constant.TeacherConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 老师服务层
@@ -49,11 +53,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public Boolean insertTeacher(String name, String jobId, String password, String contact) {
+    public Boolean insertTeacher(String name, String jobId, String password, String contact, Integer type, String position) {
         if (!ObjectUtils.isEmpty(teacherDao.queryTeacherPoByJobId(jobId))) {
             throw new BizException(ResultCode.FAILED, "该老师已存在");
         }
-        return teacherDao.insertTeacher(name, jobId, contact) && teaAuthDao.insertTeaAuth(jobId, DigestUtils.md5DigestAsHex(password.getBytes()));
+        if (!Objects.equals(type, TeacherConstant.COMMON) && !Objects.equals(type, TeacherConstant.ADMIN)) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "错误的类型");
+        }
+        return teacherDao.insertTeacher(name, jobId, contact, type, position) &&
+                teaAuthDao.insertTeaAuth(jobId, DigestUtils.md5DigestAsHex(password.getBytes()));
     }
 
     @Override
@@ -66,7 +74,17 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<TeacherDto> queryTeacherDtoList(String name, String jobId) {
-        return teacherDao.queryTeacherDtoList(name, jobId);
+    public CommonPage<TeacherDto> queryTeacherDtoList(String name, String jobId, Integer type, Integer pageNum, Integer pageSize) {
+        // 分页参数设置，pageNum 默认为1，pageSize 默认为10
+        if (ObjectUtils.isEmpty(pageNum) || pageNum < 0 || pageNum >= 65535) {
+            pageNum = 1;
+        }
+        if (ObjectUtils.isEmpty(pageSize) || pageSize < 0 || pageSize >= 65535) {
+            pageSize = 10;
+        }
+        // 开启 pageHelper 自动分页插件
+        PageHelper.startPage(pageNum, pageSize);
+        List<TeacherDto> teacherDtoList = teacherDao.queryTeacherDtoList(name, jobId, type);
+        return CommonPage.restPage(teacherDtoList);
     }
 }

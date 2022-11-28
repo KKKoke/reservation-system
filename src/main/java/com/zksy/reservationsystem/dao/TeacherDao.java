@@ -28,7 +28,7 @@ public interface TeacherDao {
     /**
      * 新增老师
      */
-    Boolean insertTeacher(String name, String jobId, String contact);
+    Boolean insertTeacher(String name, String jobId, String contact, Integer type, String position);
 
     /**
      * 删除老师
@@ -38,5 +38,5 @@ public interface TeacherDao {
     /**
      * 获取老师列表
      */
-    List<TeacherDto> queryTeacherDtoList(String name, String jobId);
+    List<TeacherDto> queryTeacherDtoList(String name, String jobId, Integer type);
 }
