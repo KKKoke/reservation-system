@@ -1,5 +1,7 @@
 package com.zksy.reservationsystem.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.*;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
@@ -77,19 +79,45 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
     }
 
     @Override
-    public List<ReserveRecordDto> queryReserveRecordDtoListByJobId(String jobId) {
+    public CommonPage<ReserveRecordDto> queryReserveRecordDtoListByJobId(String jobId, Integer pageNum, Integer pageSize) {
         if (ObjectUtils.isEmpty(teacherDao.queryTeacherPoByJobId(jobId))) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "该老师不存在");
         }
-        return BeanConvertor.reserveRecordPoListToDtoList(reserveRecordDao.queryReserveRecordPoListByJobId(jobId));
+        // 分页参数设置，pageNum 默认为1，pageSize 默认为10
+        if (ObjectUtils.isEmpty(pageNum) || pageNum < 0 || pageNum >= 65535) {
+            pageNum = 1;
+        }
+        if (ObjectUtils.isEmpty(pageSize) || pageSize < 0 || pageSize >= 65535) {
+            pageSize = 10;
+        }
+        // 开启 pageHelper 自动分页插件
+        PageHelper.startPage(pageNum, pageSize);
+        List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByJobId(jobId);
+        CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
+        List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
+        assert reserveRecordDtoList != null;
+        return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
     @Override
-    public List<ReserveRecordDto> queryReserveRecordDtoListByStudentId(String studentId) {
+    public CommonPage<ReserveRecordDto> queryReserveRecordDtoListByStudentId(String studentId, Integer pageNum, Integer pageSize) {
         if (ObjectUtils.isEmpty(studentDao.queryStudentPoByStudentId(studentId))) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "该学生不存在");
         }
-        return BeanConvertor.reserveRecordPoListToDtoList(reserveRecordDao.queryReserveRecordPoListByStudentId(studentId));
+        // 分页参数设置，pageNum 默认为1，pageSize 默认为10
+        if (ObjectUtils.isEmpty(pageNum) || pageNum < 0 || pageNum >= 65535) {
+            pageNum = 1;
+        }
+        if (ObjectUtils.isEmpty(pageSize) || pageSize < 0 || pageSize >= 65535) {
+            pageSize = 10;
+        }
+        // 开启 pageHelper 自动分页插件
+        PageHelper.startPage(pageNum, pageSize);
+        List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByStudentId(studentId);
+        CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
+        List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
+        assert reserveRecordDtoList != null;
+        return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
     @Override
@@ -168,13 +196,30 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
     }
 
     @Override
-    public List<ReserveRecordDto> queryReserveRecordDtoList() {
+    public CommonPage<ReserveRecordDto> queryReserveRecordDtoList(Integer pageNum, Integer pageSize) {
         TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();
         StudentPo studentPo = StudentPoHolder.getStudentPo();
+        // 分页参数设置，pageNum 默认为1，pageSize 默认为10
+        if (ObjectUtils.isEmpty(pageNum) || pageNum < 0 || pageNum >= 65535) {
+            pageNum = 1;
+        }
+        if (ObjectUtils.isEmpty(pageSize) || pageSize < 0 || pageSize >= 65535) {
+            pageSize = 10;
+        }
+        // 开启 pageHelper 自动分页插件
+        PageHelper.startPage(pageNum, pageSize);
         if (!ObjectUtils.isEmpty(studentPo)) {
-            return BeanConvertor.reserveRecordPoListToDtoList(reserveRecordDao.queryReserveRecordPoListByStudentId(studentPo.getStudentId()));
+            List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByStudentId(studentPo.getStudentId());
+            CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
+            List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
+            assert reserveRecordDtoList != null;
+            return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
         } else if (!ObjectUtils.isEmpty(teacherDao)) {
-            return BeanConvertor.reserveRecordPoListToDtoList(reserveRecordDao.queryReserveRecordPoListByJobId(teacherPo.getJobId()));
+            List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByJobId(teacherPo.getJobId());
+            CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
+            List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
+            assert reserveRecordDtoList != null;
+            return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
         } else {
             return null;
         }

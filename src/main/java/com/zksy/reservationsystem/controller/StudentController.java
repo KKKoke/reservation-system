@@ -53,8 +53,8 @@ public class StudentController {
      * 获取学生列表
      */
     @GetMapping("/queryStudentList")
-    public CommonResult<?> queryStudentDtoList(String name, String studentId, String className, String dormitory) {
-        return CommonResult.success(studentService.queryStudentDtoList(name, studentId, className, dormitory));
+    public CommonResult<?> queryStudentDtoList(String name, String studentId, String className, String dormitory, Integer pageNum, Integer pageSize) {
+        return CommonResult.success(studentService.queryStudentDtoList(name, studentId, className, dormitory, pageNum, pageSize));
     }
 
     /**

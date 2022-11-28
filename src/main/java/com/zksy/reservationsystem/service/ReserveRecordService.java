@@ -1,5 +1,6 @@
 package com.zksy.reservationsystem.service;
 
+import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 
@@ -21,12 +22,12 @@ public interface ReserveRecordService {
     /**
      * 根据老师工号获取访谈记录列表
      */
-    List<ReserveRecordDto> queryReserveRecordDtoListByJobId(String jobId);
+    CommonPage<ReserveRecordDto> queryReserveRecordDtoListByJobId(String jobId, Integer pageNum, Integer pageSize);
 
     /**
      * 根据学生学号获取访谈记录列表
      */
-    List<ReserveRecordDto> queryReserveRecordDtoListByStudentId(String studentId);
+    CommonPage<ReserveRecordDto> queryReserveRecordDtoListByStudentId(String studentId, Integer pageNum, Integer pageSize);
 
     /**
      * 老师审核访谈预约
@@ -46,5 +47,5 @@ public interface ReserveRecordService {
     /**
      * 获取访谈列表
      */
-    List<ReserveRecordDto> queryReserveRecordDtoList();
+    CommonPage<ReserveRecordDto> queryReserveRecordDtoList(Integer pageNum, Integer pageSize);
 }
