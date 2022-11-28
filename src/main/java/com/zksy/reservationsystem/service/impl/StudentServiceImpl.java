@@ -1,6 +1,8 @@
 package com.zksy.reservationsystem.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.PageHelper;
+import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.StuAuthDao;
 import com.zksy.reservationsystem.dao.StudentDao;
@@ -66,7 +68,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDto> queryStudentDtoList(String name, String studentId, String className, String dormitory) {
-        return studentDao.queryStudentDtoList(name, studentId, className, dormitory);
+    public CommonPage<StudentDto> queryStudentDtoList(String name, String studentId, String className, String dormitory, Integer pageNum, Integer pageSize) {
+        // 分页参数设置，pageNum 默认为1，pageSize 默认为10
+        if (ObjectUtils.isEmpty(pageNum) || pageNum < 0 || pageNum >= 65535) {
+            pageNum = 1;
+        }
+        if (ObjectUtils.isEmpty(pageSize) || pageSize < 0 || pageSize >= 65535) {
+            pageSize = 10;
+        }
+        // 开启 pageHelper 自动分页插件
+        PageHelper.startPage(pageNum, pageSize);
+        List<StudentDto> studentDtoList = studentDao.queryStudentDtoList(name, studentId, className, dormitory);
+        return CommonPage.restPage(studentDtoList);
     }
 }
