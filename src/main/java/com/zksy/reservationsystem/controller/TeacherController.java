@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 老师控制层
@@ -32,8 +33,9 @@ public class TeacherController {
     @AuthAdmin
     @PostMapping("/insertTeacher")
     public CommonResult<?> insertTeacher(@NotBlank(message = "name can not be null") String name, @NotBlank(message = "jobId can not be null") String jobId,
-                                         @NotBlank(message = "password can not be null") String password, @NotBlank(message = "contact can not be null") String contact) {
-        if (teacherService.insertTeacher(name, jobId, password, contact)) {
+                                         @NotBlank(message = "password can not be null") String password, @NotBlank(message = "contact can not be null") String contact,
+                                         @NotNull(message = "type can not be null") Integer type, @NotBlank(message = "position can not be null") String position) {
+        if (teacherService.insertTeacher(name, jobId, password, contact, type, position)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
@@ -55,8 +57,8 @@ public class TeacherController {
      * 获取老师列表
      */
     @GetMapping("/queryTeacherList")
-    public CommonResult<?> queryTeacherDtoList(String name, String jobId) {
-        return CommonResult.success(teacherService.queryTeacherDtoList(name, jobId));
+    public CommonResult<?> queryTeacherDtoList(String name, String jobId, Integer type, Integer pageNum, Integer pageSize) {
+        return CommonResult.success(teacherService.queryTeacherDtoList(name, jobId, type, pageNum, pageSize));
     }
 
     /**
