@@ -2,6 +2,7 @@ package com.zksy.reservationsystem.dao;
 
 import com.zksy.reservationsystem.domain.dto.TeacherDto;
 import com.zksy.reservationsystem.domain.po.TeacherPo;
+import com.zksy.reservationsystem.domain.vo.TeacherVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface TeacherDao {
     /**
      * 新增老师
      */
-    Boolean insertTeacher(String name, String jobId, String contact, Integer type, String position);
+    Boolean insertTeacher(TeacherVo teacherVo);
 
     /**
      * 删除老师
@@ -39,4 +40,14 @@ public interface TeacherDao {
      * 获取老师列表
      */
     List<TeacherDto> queryTeacherDtoList(String name, String jobId, Integer type);
+
+    /**
+     * 修改老师信息
+     */
+    Boolean updateTeacherPo(TeacherPo teacherPo);
+
+    /**
+     * 获取老师包括已删除
+     */
+    TeacherPo queryTeacherPoWithDeleted(String jobId);
 }

@@ -1,12 +1,16 @@
 package com.zksy.reservationsystem.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.github.pagehelper.PageHelper;
 import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.TeaAuthDao;
 import com.zksy.reservationsystem.dao.TeacherDao;
 import com.zksy.reservationsystem.domain.dto.TeacherDto;
+import com.zksy.reservationsystem.domain.po.TeaAuthPo;
 import com.zksy.reservationsystem.domain.po.TeacherPo;
+import com.zksy.reservationsystem.domain.vo.TeaUpdateVo;
+import com.zksy.reservationsystem.domain.vo.TeacherVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.TeacherService;
 import com.zksy.reservationsystem.util.constant.TeacherConstant;
@@ -53,15 +57,28 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public Boolean insertTeacher(String name, String jobId, String password, String contact, Integer type, String position) {
-        if (!ObjectUtils.isEmpty(teacherDao.queryTeacherPoByJobId(jobId))) {
-            throw new BizException(ResultCode.FAILED, "该老师已存在");
-        }
-        if (!Objects.equals(type, TeacherConstant.COMMON) && !Objects.equals(type, TeacherConstant.ADMIN)) {
+    public Boolean insertTeacher(TeacherVo teacherVo) {
+        TeacherPo oldTeacherPo = teacherDao.queryTeacherPoWithDeleted(teacherVo.getJobId());
+        TeaAuthPo oldTeaAuthPo = teaAuthDao.queryTeaAuthPoWithDeleted(teacherVo.getJobId());
+        if (!Objects.equals(teacherVo.getType(), TeacherConstant.COMMON) && !Objects.equals(teacherVo.getType(), TeacherConstant.ADMIN)) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "错误的类型");
         }
-        return teacherDao.insertTeacher(name, jobId, contact, type, position) &&
-                teaAuthDao.insertTeaAuth(jobId, DigestUtils.md5DigestAsHex(password.getBytes()));
+        if (!ObjectUtils.isEmpty(oldTeacherPo)) {
+            if (Objects.equals(oldTeacherPo.getIsDeleted(), 0)) {
+                throw new BizException(ResultCode.FAILED, "该老师已存在");
+            }
+            TeacherPo teacherPoToUpdate = BeanUtil.copyProperties(teacherVo, TeacherPo.class);
+            teacherPoToUpdate.setIsDeleted(0);
+            if (!ObjectUtils.isEmpty(oldTeaAuthPo)) {
+                return teacherDao.updateTeacherPo(teacherPoToUpdate) &&
+                        teaAuthDao.updateTeaAuth(new TeaAuthPo(teacherVo.getJobId(),
+                                DigestUtils.md5DigestAsHex(teacherVo.getPassword().getBytes()), 0));
+            }
+            return teacherDao.updateTeacherPo(teacherPoToUpdate) &&
+                    teaAuthDao.insertTeaAuth(teacherVo.getJobId(), DigestUtils.md5DigestAsHex(teacherVo.getPassword().getBytes()));
+        }
+        return teacherDao.insertTeacher(teacherVo) &&
+                teaAuthDao.insertTeaAuth(teacherVo.getJobId(), DigestUtils.md5DigestAsHex(teacherVo.getPassword().getBytes()));
     }
 
     @Override
@@ -86,5 +103,19 @@ public class TeacherServiceImpl implements TeacherService {
         PageHelper.startPage(pageNum, pageSize);
         List<TeacherDto> teacherDtoList = teacherDao.queryTeacherDtoList(name, jobId, type);
         return CommonPage.restPage(teacherDtoList);
+    }
+
+    @Override
+    public Boolean updateTeacher(TeaUpdateVo teaUpdateVo) {
+        if (!Objects.equals(teaUpdateVo.getType(), TeacherConstant.COMMON) && !Objects.equals(teaUpdateVo.getType(), TeacherConstant.ADMIN)) {
+            throw new BizException(ResultCode.VALIDATE_FAILED, "错误的类型");
+        }
+        TeacherPo oldTeacherPo = teacherDao.queryTeacherPoByJobId(teaUpdateVo.getJobId());
+        if (ObjectUtils.isEmpty(oldTeacherPo)) {
+            throw new BizException(ResultCode.FAILED, "该老师不存在");
+        }
+        TeacherPo teacherPo = BeanUtil.copyProperties(teaUpdateVo, TeacherPo.class);
+        teacherPo.setIsDeleted(0);
+        return teacherDao.updateTeacherPo(teacherPo);
     }
 }

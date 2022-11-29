@@ -7,6 +7,7 @@ import com.zksy.reservationsystem.domain.dto.ExportHeadDto;
 import com.zksy.reservationsystem.domain.po.TeacherPo;
 import com.zksy.reservationsystem.service.ExportService;
 import com.zksy.reservationsystem.util.annotation.AuthAdmin;
+import com.zksy.reservationsystem.util.annotation.AuthTeacher;
 import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -40,6 +41,7 @@ public class ExportController {
     /**
      * 导出某个老师访谈数据报表
      */
+    @AuthTeacher
     @GetMapping("/exportRecordOfOneTeacher")
     public void exportRecordOfOneTeacher(@NotBlank(message = "jobId can not be null") String jobId, HttpServletResponse response) throws IOException {
         TeacherPo teacherPo = TeacherPoHolder.getTeacherPo();

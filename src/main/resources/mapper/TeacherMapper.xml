@@ -18,6 +18,16 @@
         where job_id = #{jobId}
     </update>
 
+    <update id="updateTeacherPo">
+        update teacher
+        set `name`     = #{name},
+            contact    = #{contact},
+            `type`     = #{type},
+            `position` = #{position},
+            is_deleted = #{isDeleted}
+        where job_id = #{jobId}
+    </update>
+
     <select id="queryTeacherDtoByJobId" resultMap="teacherDtoMap">
         select id, `name`, job_id, contact, `type`, `position`
         from teacher
@@ -47,6 +57,12 @@
                 and `type` like concat('%', #{type}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="queryTeacherPoWithDeleted" resultMap="teacherPoMap">
+        select id, `name`, job_id, contact, `type`, `position`, is_deleted
+        from teacher
+        where job_id = #{jobId}
     </select>
 
     <resultMap id="teacherPoMap" type="com.zksy.reservationsystem.domain.po.TeacherPo">

@@ -37,8 +37,8 @@ public class AuthCheckAop {
 
     @Before("@annotation(com.zksy.reservationsystem.util.annotation.AuthTeacher)")
     public void authCheckForTeacher(JoinPoint joinPoint) {
-        boolean authAdmin = isAuthTeacher((ProceedingJoinPoint) joinPoint);
-        if (!authAdmin) {
+        boolean authTeacher = isAuthTeacher((ProceedingJoinPoint) joinPoint);
+        if (!authTeacher) {
             throw new BizException(ResultCode.FORBIDDEN, "非法请求，该接口只允许老师访问");
         }
     }

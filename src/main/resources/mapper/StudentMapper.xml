@@ -20,15 +20,42 @@
         where student_id = #{studentId}
     </update>
 
+    <update id="updateStudentPo">
+        update student
+        set `name`         = #{name},
+            class_name     = #{className},
+            contact        = #{contact},
+            parent_contact = #{parentContact},
+            dormitory      = #{dormitory},
+            gender         = #{gender},
+            is_deleted     = #{isDeleted}
+        where student_id = #{studentId}
+    </update>
+
     <select id="queryStudentDtoByStudentId" resultMap="studentDtoMap">
-        select id, `name`, student_id, class_name, gender, contact, parent_contact, dormitory
+        select id,
+               `name`,
+               student_id,
+               class_name,
+               gender,
+               contact,
+               parent_contact,
+               dormitory
         from student
         where student_id = #{studentId}
           and is_deleted = 0
     </select>
 
     <select id="queryStudentPoByStudentId" resultMap="studentPoMap">
-        select id, `name`, student_id, class_name, gender, contact, parent_contact, dormitory, is_deleted
+        select id,
+               `name`,
+               student_id,
+               class_name,
+               gender,
+               contact,
+               parent_contact,
+               dormitory,
+               is_deleted
         from student
         where student_id = #{studentId}
           and is_deleted = 0
@@ -52,6 +79,20 @@
                 and dormitory like concat('%', #{dormitory}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="queryStudentPoWithDeleted" resultMap="studentPoMap">
+        select id,
+               `name`,
+               student_id,
+               class_name,
+               gender,
+               contact,
+               parent_contact,
+               dormitory,
+               is_deleted
+        from student
+        where student_id = #{studentId}
     </select>
 
     <resultMap id="studentPoMap" type="com.zksy.reservationsystem.domain.po.StudentPo">
