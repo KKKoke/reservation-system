@@ -15,11 +15,24 @@
         where uname = #{jobId}
     </update>
 
+    <update id="updateTeaAuth">
+        update tea_auth
+        set passwd     = #{passwd},
+            is_deleted = #{isDeleted}
+        where uname = #{uname}
+    </update>
+
     <select id="queryTeaAuthPoByJobId" resultMap="teaAuthPoMap">
         select id, uname, passwd, is_deleted
         from tea_auth
         where uname = #{jobId}
           and is_deleted = 0
+    </select>
+
+    <select id="queryTeaAuthPoWithDeleted" resultMap="teaAuthPoMap">
+        select id, uname, passwd, is_deleted
+        from tea_auth
+        where uname = #{jobId}
     </select>
 
     <resultMap id="teaAuthPoMap" type="com.zksy.reservationsystem.domain.po.TeaAuthPo">

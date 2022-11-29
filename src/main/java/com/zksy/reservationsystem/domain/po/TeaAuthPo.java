@@ -26,4 +26,10 @@ public class TeaAuthPo {
 
     /** 是否删除 */
     private Integer isDeleted;
+
+    public TeaAuthPo(String uname, String passwd, Integer isDeleted) {
+        this.uname = uname;
+        this.passwd = passwd;
+        this.isDeleted = isDeleted;
+    }
 }

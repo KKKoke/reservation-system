@@ -3,8 +3,8 @@ package com.zksy.reservationsystem.service;
 import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.domain.dto.TeacherDto;
 import com.zksy.reservationsystem.domain.po.TeacherPo;
-
-import java.util.List;
+import com.zksy.reservationsystem.domain.vo.TeaUpdateVo;
+import com.zksy.reservationsystem.domain.vo.TeacherVo;
 
 /**
  * 老师服务层
@@ -27,7 +27,7 @@ public interface TeacherService {
     /**
      * 新增老师
      */
-    Boolean insertTeacher(String name, String jobId, String password, String contact, Integer type, String position);
+    Boolean insertTeacher(TeacherVo teacherVo);
 
     /**
      * 删除老师
@@ -38,4 +38,9 @@ public interface TeacherService {
      * 获取老师列表
      */
     CommonPage<TeacherDto> queryTeacherDtoList(String name, String jobId, Integer type, Integer pageNum, Integer pageSize);
+
+    /**
+     * 更新老师信息
+     */
+    Boolean updateTeacher(TeaUpdateVo teaUpdateVo);
 }

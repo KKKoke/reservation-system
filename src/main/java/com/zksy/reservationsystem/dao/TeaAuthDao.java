@@ -26,4 +26,14 @@ public interface TeaAuthDao {
      * 删除老师认证信息
      */
     Boolean deleteTeaAuth(String jobId);
+
+    /**
+     * 修改老师认证状态
+     */
+    Boolean updateTeaAuth(TeaAuthPo teaAuthPo);
+
+    /**
+     * 获取老师认证信息包括已删除
+     */
+    TeaAuthPo queryTeaAuthPoWithDeleted(String jobId);
 }

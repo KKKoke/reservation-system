@@ -1,17 +1,17 @@
 package com.zksy.reservationsystem.controller;
 
 import com.zksy.reservationsystem.common.CommonResult;
+import com.zksy.reservationsystem.domain.vo.TeaUpdateVo;
+import com.zksy.reservationsystem.domain.vo.TeacherVo;
 import com.zksy.reservationsystem.service.TeacherService;
 import com.zksy.reservationsystem.util.annotation.AuthAdmin;
+import com.zksy.reservationsystem.util.annotation.AuthTeacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * 老师控制层
@@ -32,10 +32,8 @@ public class TeacherController {
      */
     @AuthAdmin
     @PostMapping("/insertTeacher")
-    public CommonResult<?> insertTeacher(@NotBlank(message = "name can not be null") String name, @NotBlank(message = "jobId can not be null") String jobId,
-                                         @NotBlank(message = "password can not be null") String password, @NotBlank(message = "contact can not be null") String contact,
-                                         @NotNull(message = "type can not be null") Integer type, @NotBlank(message = "position can not be null") String position) {
-        if (teacherService.insertTeacher(name, jobId, password, contact, type, position)) {
+    public CommonResult<?> insertTeacher(@Valid @RequestBody TeacherVo teacherVo) {
+        if (teacherService.insertTeacher(teacherVo)) {
             return CommonResult.success();
         }
         return CommonResult.failed();
@@ -67,5 +65,17 @@ public class TeacherController {
     @GetMapping("/queryTeacherByJobId")
     public CommonResult<?> queryTeacherDtoByJobId(@NotBlank(message = "jobId can not be null") String jobId) {
         return CommonResult.success(teacherService.queryTeacherDtoByJobId(jobId));
+    }
+
+    /**
+     * 修改老师信息
+     */
+    @AuthTeacher
+    @PostMapping("/updateTeacher")
+    public CommonResult<?> updateTeacher(@RequestBody TeaUpdateVo teaUpdateVo) {
+        if (teacherService.updateTeacher(teaUpdateVo)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
     }
 }
