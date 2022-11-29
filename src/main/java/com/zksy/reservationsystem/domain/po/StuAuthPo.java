@@ -26,4 +26,10 @@ public class StuAuthPo {
 
     /** 是否删除 */
     private Integer isDeleted;
+
+    public StuAuthPo(String uname, String passwd, Integer isDeleted) {
+        this.uname = uname;
+        this.passwd = passwd;
+        this.isDeleted = isDeleted;
+    }
 }

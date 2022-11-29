@@ -1,5 +1,6 @@
 package com.zksy.reservationsystem.dao;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.zksy.reservationsystem.domain.dto.StudentDto;
 import com.zksy.reservationsystem.domain.po.StudentPo;
 import org.apache.ibatis.annotations.Mapper;
@@ -39,4 +40,14 @@ public interface StudentDao {
      * 获取学生列表
      */
     List<StudentDto> queryStudentDtoList(String name, String studentId, String className, String dormitory);
+
+    /**
+     * 修改学生信息
+     */
+    Boolean updateStudentPo(StudentPo studentPo);
+
+    /**
+     * 获取学生包括已删除
+     */
+    StudentPo queryStudentPoWithDeleted(String studentId);
 }

@@ -15,11 +15,24 @@
         where uname = #{studentId}
     </update>
 
+    <update id="updateStuAuth">
+        update stu_auth
+        set passwd     = #{passwd},
+            is_deleted = #{isDeleted}
+        where uname = #{uname}
+    </update>
+
     <select id="queryStuAuthPoByStudentId" resultMap="stuAuthPoMap">
         select id, uname, passwd, is_deleted
         from stu_auth
         where uname = #{studentId}
           and is_deleted = 0
+    </select>
+
+    <select id="queryStuAuthPoWithDeleted" resultMap="stuAuthPoMap">
+        select id, uname, passwd, is_deleted
+        from stu_auth
+        where uname = #{studentId}
     </select>
 
     <resultMap id="stuAuthPoMap" type="com.zksy.reservationsystem.domain.po.StuAuthPo">

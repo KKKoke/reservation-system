@@ -26,4 +26,14 @@ public interface StuAuthDao {
      * 删除学生认证信息
      */
     Boolean deleteStuAuth(String studentId);
+
+    /**
+     * 修改学生认证状态
+     */
+    Boolean updateStuAuth(StuAuthPo stuAuthPo);
+
+    /**
+     * 获取学生认证信息包括已删除
+     */
+    StuAuthPo queryStuAuthPoWithDeleted(String studentId);
 }

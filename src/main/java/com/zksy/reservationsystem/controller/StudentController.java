@@ -1,9 +1,10 @@
 package com.zksy.reservationsystem.controller;
 
 import com.zksy.reservationsystem.common.CommonResult;
+import com.zksy.reservationsystem.domain.vo.StuUpdateVo;
 import com.zksy.reservationsystem.domain.vo.StudentVo;
 import com.zksy.reservationsystem.service.StudentService;
-import com.zksy.reservationsystem.util.annotation.AuthAdmin;
+import com.zksy.reservationsystem.util.annotation.AuthTeacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class StudentController {
     /**
      * 新增学生
      */
-    @AuthAdmin
+    @AuthTeacher
     @PostMapping("/insertStudent")
     public CommonResult<?> insertStudent(@Valid @RequestBody StudentVo studentVo) {
         if (studentService.insertStudent(studentVo)) {
@@ -40,7 +41,7 @@ public class StudentController {
     /**
      * 删除学生
      */
-    @AuthAdmin
+    @AuthTeacher
     @PostMapping("/deleteStudent")
     public CommonResult<?> deleteStudent(@NotBlank(message = "studentId can not be null") String studentId) {
         if (studentService.deleteStudent(studentId)) {
@@ -63,5 +64,17 @@ public class StudentController {
     @GetMapping("/queryStudentByStudentId")
     public CommonResult<?> queryStudentDtoByStudentId(@NotBlank(message = "studentId can not be null") String studentId) {
         return CommonResult.success(studentService.queryStudentDtoByStudentId(studentId));
+    }
+
+    /**
+     * 修改学生信息
+     */
+    @AuthTeacher
+    @PostMapping("/updateStudent")
+    public CommonResult<?> updateStudent(@RequestBody StuUpdateVo stuUpdateVo) {
+        if (studentService.updateStudent(stuUpdateVo)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
     }
 }
