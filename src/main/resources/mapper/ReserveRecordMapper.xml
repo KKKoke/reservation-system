@@ -164,10 +164,10 @@
                 and rr.reserve_type like concat('%', #{recordSearchVo.reserveType}, '%')
             </if>
             <if test="recordSearchVo.startTime != null and recordSearchVo.startTime!= ''">
-                and date_format(rr.create_time,'%y%m%d') >= date_format(#{recordSearchVo.startTime},'%y%m%d')
+                and date_format(rr.create_time,'%y%m%d') &gt;= date_format(#{recordSearchVo.startTime},'%y%m%d')
             </if>
             <if test="recordSearchVo.endTime != null and recordSearchVo.endTime!= ''">
-                and date_format(rr.create_time,'%y%m%d') >= date_format(#{recordSearchVo.endTime},'%y%m%d')
+                and date_format(rr.create_time,'%y%m%d') &lt;= date_format(#{recordSearchVo.endTime},'%y%m%d')
             </if>
             <if test="recordSearchVo.status != null">
                 and rr.status = #{recordSearchVo.status}
