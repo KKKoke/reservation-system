@@ -33,4 +33,9 @@ public interface ReserveTypeDao {
      * 通过访谈选项id获取访谈类型选项
      */
     ReserveTypePo queryReserveTypeByTypeId(Integer typeId);
+
+    /**
+     * 通过访谈选项id获取访谈类型选项包括已删除
+     */
+    ReserveTypePo queryReserveTypeWithDeletedByTypeId(Integer typeId);
 }

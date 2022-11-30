@@ -33,4 +33,9 @@ public interface FeedbackOptionDao {
      * 通过反馈选项id获取反馈选项
      */
     FeedbackOptionPo queryFeedbackOptionByOptionId(Integer optionId);
+
+    /**
+     * 通过反馈选项id获取反馈选项包括已删除
+     */
+    FeedbackOptionPo queryFeedbackOptionWithDeletedByOptionId(Integer optionId);
 }

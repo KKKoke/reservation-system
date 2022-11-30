@@ -55,7 +55,7 @@ public class ExportServiceImpl implements ExportService {
         exportDtoList.forEach(exportDto -> {
             StringBuilder reserveType = new StringBuilder();
             for (Integer typeId : ReserveTypePo.parseReserveType(exportDto.getReserveType())) {
-                reserveType.append(reserveTypeDao.queryReserveTypeByTypeId(typeId).getType());
+                reserveType.append(reserveTypeDao.queryReserveTypeWithDeletedByTypeId(typeId).getType());
                 reserveType.append(";");
             }
             exportDto.setReserveType(String.valueOf(reserveType));
@@ -72,7 +72,7 @@ public class ExportServiceImpl implements ExportService {
         exportDtoList.forEach(exportDto -> {
             StringBuilder reserveType = new StringBuilder();
             for (Integer typeId : ReserveTypePo.parseReserveType(exportDto.getReserveType())) {
-                reserveType.append(reserveTypeDao.queryReserveTypeByTypeId(typeId).getType());
+                reserveType.append(reserveTypeDao.queryReserveTypeWithDeletedByTypeId(typeId).getType());
                 reserveType.append(";");
             }
             exportDto.setReserveType(String.valueOf(reserveType));

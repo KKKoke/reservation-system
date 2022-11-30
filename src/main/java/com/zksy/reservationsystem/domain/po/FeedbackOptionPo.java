@@ -20,4 +20,7 @@ public class FeedbackOptionPo {
 
     /** 反馈选项内容 */
     private String option;
+
+    /** 是否删除 */
+    private Integer isDeleted;
 }

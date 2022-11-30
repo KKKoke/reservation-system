@@ -24,6 +24,9 @@ public class ReserveTypePo {
     /** 类型名称 */
     private String type;
 
+    /** 是否删除 */
+    private Integer isDeleted;
+
     public static List<Integer> parseReserveType(String reserveTypeJsonStr) {
         return JSONUtil.toList(JSONUtil.parseArray(reserveTypeJsonStr), Integer.class);
     }
