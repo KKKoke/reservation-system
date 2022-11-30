@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -39,7 +40,7 @@ public class BeanConvertor {
 
     public static List<ReserveRecordDto> reserveRecordPoListToDtoList(List<ReserveRecordPo> reserveRecordPoList) {
         if (ObjectUtils.isEmpty(reserveRecordPoList)) {
-            return null;
+            return Collections.emptyList();
         }
         List<ReserveRecordDto> reserveRecordDtoList = new ArrayList<>();
         reserveRecordPoList.forEach(reserveRecordPo -> {
@@ -55,7 +56,7 @@ public class BeanConvertor {
         ReserveRecordDto reserveRecordDto = BeanUtil.copyProperties(reserveRecordPo, ReserveRecordDto.class);
         List<String> reserveTypeList = new ArrayList<>();
         for (Integer typeId : ReserveTypePo.parseReserveType(reserveRecordPo.getReserveType())) {
-            reserveTypeList.add(reserveTypeDao.queryReserveTypeByTypeId(typeId).getType());
+            reserveTypeList.add(reserveTypeDao.queryReserveTypeWithDeletedByTypeId(typeId).getType());
         }
         TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordPo.getJobId());
         StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordPo.getStudentId());

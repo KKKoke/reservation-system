@@ -1,8 +1,10 @@
 package com.zksy.reservationsystem.controller;
 
 import com.zksy.reservationsystem.common.CommonResult;
+import com.zksy.reservationsystem.domain.vo.RecordSearchVo;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.service.ReserveRecordService;
+import com.zksy.reservationsystem.util.annotation.AuthAdmin;
 import com.zksy.reservationsystem.util.annotation.AuthTeacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -100,5 +102,9 @@ public class ReserveRecordController {
     /**
      * 获取所有访谈记录
      */
-
+    @AuthAdmin
+    @PostMapping("/queryAllReserveRecord")
+    public CommonResult<?> queryAllReserveRecord(@RequestBody RecordSearchVo recordSearchVo) {
+        return CommonResult.success(reserveRecordService.queryAllReserveRecordDto(recordSearchVo));
+    }
 }
