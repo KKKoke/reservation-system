@@ -96,4 +96,9 @@ public class ReserveRecordController {
         }
         return CommonResult.failed();
     }
+
+    /**
+     * 获取所有访谈记录
+     */
+
 }

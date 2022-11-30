@@ -8,18 +8,26 @@
         )
     </insert>
 
-    <delete id="deleteReserveType">
-        delete
-        from reserve_type
+    <update id="deleteReserveType">
+        update reserve_type
+        set is_deleted = 1
         where id = #{typeId}
-    </delete>
+    </update>
 
     <select id="queryReserveTypeList" resultMap="reserveTypePoMap">
         select id, `type`
         from reserve_type
+        where is_deleted = 0
     </select>
 
     <select id="queryReserveTypeByTypeId" resultMap="reserveTypePoMap">
+        select id, `type`
+        from reserve_type
+        where id = #{typeId}
+          and is_deleted = 0
+    </select>
+
+    <select id="queryReserveTypeWithDeletedByTypeId" resultMap="reserveTypePoMap">
         select id, `type`
         from reserve_type
         where id = #{typeId}

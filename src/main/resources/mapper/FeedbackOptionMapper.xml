@@ -8,18 +8,26 @@
         )
     </insert>
 
-    <delete id="deleteFeedbackOption">
-        delete
-        from stu_feedback_option
+    <update id="deleteFeedbackOption">
+        update stu_feedback_option
+        set is_deleted = 1
         where id = #{optionId}
-    </delete>
+    </update>
 
     <select id="queryFeedbackOptionList" resultMap="feedbackOptionPoMap">
         select id, `option`
         from stu_feedback_option
+        where is_deleted = 0
     </select>
 
     <select id="queryFeedbackOptionByOptionId" resultMap="feedbackOptionPoMap">
+        select id, `option`
+        from stu_feedback_option
+        where id = #{optionId}
+          and is_deleted = 0
+    </select>
+
+    <select id="queryFeedbackOptionWithDeletedByOptionId" resultMap="feedbackOptionPoMap">
         select id, `option`
         from stu_feedback_option
         where id = #{optionId}
