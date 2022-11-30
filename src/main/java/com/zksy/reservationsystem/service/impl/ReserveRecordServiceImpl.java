@@ -6,6 +6,7 @@ import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.*;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
 import com.zksy.reservationsystem.domain.po.*;
+import com.zksy.reservationsystem.domain.vo.RecordSearchVo;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.ReserveRecordService;
@@ -212,17 +213,34 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
             List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByStudentId(studentPo.getStudentId());
             CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
             List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
-            assert reserveRecordDtoList != null;
             return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
         } else if (!ObjectUtils.isEmpty(teacherDao)) {
             List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByJobId(teacherPo.getJobId());
             CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
             List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
-            assert reserveRecordDtoList != null;
             return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
         } else {
             return null;
         }
+    }
+
+    @Override
+    public CommonPage<ReserveRecordDto> queryAllReserveRecordDto(RecordSearchVo recordSearchVo) {
+        // 分页参数设置，pageNum 默认为1，pageSize 默认为10
+        if (ObjectUtils.isEmpty(recordSearchVo.getPageNum()) || recordSearchVo.getPageNum() < 0 ||
+                recordSearchVo.getPageNum() >= 65535) {
+            recordSearchVo.setPageNum(1);
+        }
+        if (ObjectUtils.isEmpty(recordSearchVo.getPageSize()) || recordSearchVo.getPageSize() < 0 ||
+                recordSearchVo.getPageSize() >= 65535) {
+            recordSearchVo.setPageSize(10);
+        }
+        // 开启 pageHelper 自动分页插件
+        PageHelper.startPage(recordSearchVo.getPageNum(), recordSearchVo.getPageSize());
+        List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryAllReserveRecordPo(recordSearchVo);
+        CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
+        List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
+        return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
     private Boolean isReserveTypeJsonStrValid(String reserveTypeJsonStr) {

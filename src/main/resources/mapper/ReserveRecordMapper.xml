@@ -128,6 +128,54 @@
         order by start_time desc
     </select>
 
+    <select id="queryAllReserveRecordPo" resultMap="reserveRecordPoMap">
+        select rr.id,
+        rr.student_id,
+        rr.job_id,
+        rr.reserve_type,
+        rr.comment,
+        rr.create_time,
+        rr.start_time,
+        rr.end_time,
+        rr.stu_feedback,
+        rr.tea_feedback,
+        rr.status,
+        rr.reject_reason,
+        rr.is_deleted,
+        rr.period_id
+        from reserve_record rr
+            join teacher t on rr.job_id = t.job_id
+            join student s on rr.student_id = s.student_id
+        <where>
+            rr.is_deleted = 0
+            <if test="recordSearchVo.studentId != null and recordSearchVo.studentId != ''">
+                and rr.student_id like concat('%', #{recordSearchVo.studentId}, '%')
+            </if>
+            <if test="recordSearchVo.stuName != null and recordSearchVo.stuName != ''">
+                and s.name like concat('%', #{recordSearchVo.stuName}, '%')
+            </if>
+            <if test="recordSearchVo.jobId != null and recordSearchVo.jobId != ''">
+                and rr.job_id like concat('%', #{recordSearchVo.jobId}, '%')
+            </if>
+            <if test="recordSearchVo.teaName != null and recordSearchVo.teaName != ''">
+                and t.name like concat('%', #{recordSearchVo.teaName}, '%')
+            </if>
+            <if test="recordSearchVo.reserveType != null and recordSearchVo.reserveType != ''">
+                and rr.reserve_type like concat('%', #{recordSearchVo.reserveType}, '%')
+            </if>
+            <if test="recordSearchVo.startTime != null and recordSearchVo.startTime!= ''">
+                and date_format(rr.create_time,'%y%m%d') >= date_format(#{recordSearchVo.startTime},'%y%m%d')
+            </if>
+            <if test="recordSearchVo.endTime != null and recordSearchVo.endTime!= ''">
+                and date_format(rr.create_time,'%y%m%d') >= date_format(#{recordSearchVo.endTime},'%y%m%d')
+            </if>
+            <if test="recordSearchVo.status != null">
+                and rr.status = #{recordSearchVo.status}
+            </if>
+        </where>
+        order by rr.start_time desc
+    </select>
+
     <resultMap id="reserveRecordPoMap" type="com.zksy.reservationsystem.domain.po.ReserveRecordPo">
         <id property="id" column="id"/>
         <result property="studentId" column="student_id"/>

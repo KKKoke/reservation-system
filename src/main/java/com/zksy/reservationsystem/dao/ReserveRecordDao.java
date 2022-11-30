@@ -1,8 +1,11 @@
 package com.zksy.reservationsystem.dao;
 
+import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
 import com.zksy.reservationsystem.domain.po.ReserveRecordPo;
+import com.zksy.reservationsystem.domain.vo.RecordSearchVo;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -64,4 +67,9 @@ public interface ReserveRecordDao {
      * 根据老师工号获取已完成的访谈记录列表
      */
     List<ReserveRecordPo> queryEndedReserveRecordPoListByJobId(String jobId);
+
+    /**
+     * 获取所有符合条件的访谈记录
+     */
+    List<ReserveRecordPo> queryAllReserveRecordPo(@Param("recordSearchVo") RecordSearchVo recordSearchVo);
 }

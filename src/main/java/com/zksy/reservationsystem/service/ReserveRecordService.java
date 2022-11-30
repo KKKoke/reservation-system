@@ -2,9 +2,8 @@ package com.zksy.reservationsystem.service;
 
 import com.zksy.reservationsystem.common.CommonPage;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
+import com.zksy.reservationsystem.domain.vo.RecordSearchVo;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
-
-import java.util.List;
 
 /**
  * 访谈记录服务层
@@ -48,4 +47,9 @@ public interface ReserveRecordService {
      * 获取访谈列表
      */
     CommonPage<ReserveRecordDto> queryReserveRecordDtoList(Integer pageNum, Integer pageSize);
+
+    /**
+     * 获取所有访谈记录
+     */
+    CommonPage<ReserveRecordDto> queryAllReserveRecordDto(RecordSearchVo recordSearchVo);
 }
