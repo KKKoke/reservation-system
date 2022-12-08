@@ -129,11 +129,11 @@ public class AuthController {
      */
     @PostMapping("/boundWithWechat")
     public CommonResult<?> boundWithWechat(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString,
-                                           @NotBlank(message = "code can not be null") String code) {
+                                           @RequestBody Map<String, String> params) {
         String token = tokenAuthString.split(" ")[1];
         String type = jwtService.getClaimTypeFromToken(token);
         String uname = jwtService.getUserNameFromToken(token);
-        if (jwtService.boundWithWechat(uname, Integer.valueOf(type), code)) {
+        if (jwtService.boundWithWechat(uname, Integer.valueOf(type), params.get("code"))) {
             return CommonResult.success();
         }
         return CommonResult.failed();
