@@ -18,6 +18,11 @@ public interface TeaAuthDao {
     TeaAuthPo queryTeaAuthPoByJobId(String jobId);
 
     /**
+     * 通过 wxOpenId 获取老师认证信息
+     */
+    TeaAuthPo queryTeaAuthPoByWxOpenId(String wxOpenId);
+
+    /**
      * 新增老师认证信息
      */
     Boolean insertTeaAuth(String uname, String passwd);
@@ -45,5 +50,5 @@ public interface TeaAuthDao {
     /**
      * 解除微信绑定
      */
-    Boolean unBoundWithWechat(String uname);
+    Boolean unboundWithWechat(String uname);
 }

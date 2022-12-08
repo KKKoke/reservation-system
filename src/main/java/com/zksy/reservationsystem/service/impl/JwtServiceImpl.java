@@ -2,7 +2,9 @@ package com.zksy.reservationsystem.service.impl;
 
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.StuAuthDao;
+import com.zksy.reservationsystem.dao.StudentDao;
 import com.zksy.reservationsystem.dao.TeaAuthDao;
+import com.zksy.reservationsystem.dao.TeacherDao;
 import com.zksy.reservationsystem.domain.po.StuAuthPo;
 import com.zksy.reservationsystem.domain.po.TeaAuthPo;
 import com.zksy.reservationsystem.exception.BizException;
@@ -15,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -32,7 +36,11 @@ public class JwtServiceImpl implements JwtService {
 
     private final StuAuthDao stuAuthDao;
 
+    private final StudentDao studentDao;
+
     private final TeaAuthDao teaAuthDao;
+
+    private final TeacherDao teacherDao;
 
     @Override
     public String login(Integer type, String username, String password) {
@@ -86,6 +94,25 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public Map<String, Object> wechatLogin(Integer type, String code) {
+        String wxOpenId = WechatUtil.getWxOpenId(code);
+        Map<String, Object> resultMap = new HashMap<>();
+        if (Objects.equals(type, JwtConstant.TEA_LOGIN_TYPE)) {
+            TeaAuthPo teaAuthPo = teaAuthDao.queryTeaAuthPoByWxOpenId(wxOpenId);
+            resultMap.put("token", jwtTokenUtil.generateToken(teaAuthPo.getUname(), JwtConstant.TEA_LOGIN_TYPE));
+            resultMap.put("teacher", teacherDao.queryTeacherDtoByJobId(teaAuthPo.getUname()));
+            return resultMap;
+        } else if (Objects.equals(type, JwtConstant.STU_LOGIN_TYPE)) {
+            StuAuthPo stuAuthPo = stuAuthDao.queryStuAuthPoByWxOpenId(wxOpenId);
+            resultMap.put("token", jwtTokenUtil.generateToken(stuAuthPo.getUname(), JwtConstant.STU_LOGIN_TYPE));
+            resultMap.put("student", studentDao.queryStudentDtoByStudentId(stuAuthPo.getUname()));
+            return resultMap;
+        } else {
+            throw new BizException(ResultCode.FAILED, "错误的登录类型");
+        }
+    }
+
+    @Override
     public String getUserNameFromToken(String token) {
         return jwtTokenUtil.getUserNameFromToken(token);
     }
@@ -112,11 +139,11 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public Boolean unBoundWithWechat(String uname, Integer type) {
+    public Boolean unboundWithWechat(String uname, Integer type) {
         if (Objects.equals(type, JwtConstant.TEA_LOGIN_TYPE)) {
-            return teaAuthDao.unBoundWithWechat(uname);
+            return teaAuthDao.unboundWithWechat(uname);
         } else if (Objects.equals(type, JwtConstant.STU_LOGIN_TYPE)) {
-            return stuAuthDao.unBoundWithWechat(uname);
+            return stuAuthDao.unboundWithWechat(uname);
         }
         return false;
     }

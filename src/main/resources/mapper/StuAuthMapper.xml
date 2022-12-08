@@ -35,6 +35,13 @@
         where uname = #{studentId}
     </select>
 
+    <select id="queryStuAuthPoByWxOpenId" resultMap="stuAuthPoMap">
+        select id, uname, passwd, is_deleted
+        from stu_auth
+        where wx_open_id = #{wxOpenId}
+          and is_deleted = 0
+    </select>
+
     <update id="boundWithWechat">
         update stu_auth
         set is_bound   = 1,
@@ -42,7 +49,7 @@
         where uname = #{jobId}
     </update>
 
-    <update id="unBoundWithWechat">
+    <update id="unboundWithWechat">
         update stu_auth
         set is_bound   = 0,
             wx_open_id = null
