@@ -59,4 +59,14 @@ public interface JwtService {
      * 获取登录类型
      */
     String getClaimTypeFromToken(String token);
+
+    /**
+     * 绑定微信
+     */
+    Boolean boundWithWechat(String uname, Integer type, String code);
+
+    /**
+     * 解除微信绑定
+     */
+    Boolean unBoundWithWechat(String uname, Integer type);
 }

@@ -36,4 +36,14 @@ public interface TeaAuthDao {
      * 获取老师认证信息包括已删除
      */
     TeaAuthPo queryTeaAuthPoWithDeleted(String jobId);
+
+    /**
+     * 绑定微信
+     */
+    Boolean boundWithWechat(String uname, String wxOpenId);
+
+    /**
+     * 解除微信绑定
+     */
+    Boolean unBoundWithWechat(String uname);
 }

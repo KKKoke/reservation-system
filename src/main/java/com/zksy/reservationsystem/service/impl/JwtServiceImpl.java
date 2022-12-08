@@ -8,6 +8,7 @@ import com.zksy.reservationsystem.domain.po.TeaAuthPo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.JwtService;
 import com.zksy.reservationsystem.util.auth.JwtTokenUtil;
+import com.zksy.reservationsystem.util.auth.WechatUtil;
 import com.zksy.reservationsystem.util.constant.JwtConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -97,5 +98,26 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String getClaimTypeFromToken(String token) {
         return jwtTokenUtil.getClaimTypeFromToken(token);
+    }
+
+    @Override
+    public Boolean boundWithWechat(String uname, Integer type, String code) {
+        String wxOpenId = WechatUtil.getWxOpenId(uname, code);
+        if (Objects.equals(type, JwtConstant.TEA_LOGIN_TYPE)) {
+            return teaAuthDao.boundWithWechat(uname, wxOpenId);
+        } else if (Objects.equals(type, JwtConstant.STU_LOGIN_TYPE)) {
+            return stuAuthDao.boundWithWechat(uname, wxOpenId);
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean unBoundWithWechat(String uname, Integer type) {
+        if (Objects.equals(type, JwtConstant.TEA_LOGIN_TYPE)) {
+            return teaAuthDao.unBoundWithWechat(uname);
+        } else if (Objects.equals(type, JwtConstant.STU_LOGIN_TYPE)) {
+            return stuAuthDao.unBoundWithWechat(uname);
+        }
+        return false;
     }
 }

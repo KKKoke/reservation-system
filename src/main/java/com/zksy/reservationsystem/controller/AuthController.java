@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,5 +98,34 @@ public class AuthController {
             return CommonResult.unauthorized();
         }
         return CommonResult.success("token未过期");
+    }
+
+    /**
+     * 绑定微信
+     */
+    @PostMapping("/boundWithWechat")
+    public CommonResult<?> boundWithWechat(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString,
+                                           @NotBlank(message = "code can not be null") String code) {
+        String token = tokenAuthString.split(" ")[1];
+        String type = jwtService.getClaimTypeFromToken(token);
+        String uname = jwtService.getUserNameFromToken(token);
+        if (jwtService.boundWithWechat(uname, Integer.valueOf(type), code)) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
+
+    /**
+     * 解除微信绑定
+     */
+    @PostMapping("/unBoundWithWechat")
+    public CommonResult<?> unBoundWithWechat(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString) {
+        String token = tokenAuthString.split(" ")[1];
+        String type = jwtService.getClaimTypeFromToken(token);
+        String uname = jwtService.getUserNameFromToken(token);
+        if (jwtService.unBoundWithWechat(uname, Integer.valueOf(type))) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
     }
 }

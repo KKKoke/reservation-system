@@ -15,17 +15,35 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TeaAuthPo {
 
-    /** 编号 */
+    /**
+     * 编号
+     */
     private Integer id;
 
-    /** 账号 */
+    /**
+     * 账号
+     */
     private String uname;
 
-    /** 密码 */
+    /**
+     * 密码
+     */
     private String passwd;
 
-    /** 是否删除 */
+    /**
+     * 是否删除
+     */
     private Integer isDeleted;
+
+    /**
+     * 是否绑定
+     */
+    private Integer isBound;
+
+    /**
+     * 微信 openid
+     */
+    private String wxOpenId;
 
     public TeaAuthPo(String uname, String passwd, Integer isDeleted) {
         this.uname = uname;
