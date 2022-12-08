@@ -46,14 +46,14 @@
         update stu_auth
         set is_bound   = 1,
             wx_open_id = #{wxOpenId}
-        where uname = #{jobId}
+        where uname = #{uname}
     </update>
 
     <update id="unboundWithWechat">
         update stu_auth
         set is_bound   = 0,
             wx_open_id = null
-        where uname = #{jobId}
+        where uname = #{uname}
     </update>
 
     <resultMap id="stuAuthPoMap" type="com.zksy.reservationsystem.domain.po.StuAuthPo">
