@@ -5,8 +5,10 @@ import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.domain.vo.WechatAuthResultVo;
 import com.zksy.reservationsystem.domain.vo.WechatAuthVo;
 import com.zksy.reservationsystem.exception.BizException;
+import com.zksy.reservationsystem.util.constant.WechatConstant;
 import com.zksy.reservationsystem.util.http.RestTemplateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
@@ -17,13 +19,20 @@ import java.util.Objects;
  * @since 2022/12/8
  */
 @Slf4j
+@Component
 public class WechatUtil {
 
-    private static final String AUTH_CODE_2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
+    private static WechatConstant wechatConstant;
+
+    public WechatUtil(WechatConstant wechatConstant) {
+        WechatUtil.wechatConstant = wechatConstant;
+    }
+
+    private static final String AUTH_CODE_2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
 
     public static String getWxOpenId(String uname, String code) {
-        WechatAuthVo wechatAuthVo = new WechatAuthVo(code);
-        String response = RestTemplateUtil.getHttps(AUTH_CODE_2SESSION_URL, JSONUtil.parseObj(wechatAuthVo));
+        WechatAuthVo wechatAuthVo = new WechatAuthVo(wechatConstant.getAppid(), wechatConstant.getSecret(), code);
+        String response = RestTemplateUtil.getHttp(AUTH_CODE_2SESSION_URL, JSONUtil.parseObj(wechatAuthVo));
         log.info(response);
         WechatAuthResultVo wechatAuthResultVo = JSONUtil.toBean(response, WechatAuthResultVo.class);
         int errcode = wechatAuthResultVo.getErrcode();
