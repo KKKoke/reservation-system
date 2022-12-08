@@ -1,10 +1,7 @@
 package com.zksy.reservationsystem.domain.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  * 微信登录值对象
@@ -13,21 +10,17 @@ import org.springframework.stereotype.Component;
  * @since 2022/12/8
  */
 @Data
-@Component
 @NoArgsConstructor
-@AllArgsConstructor
 public class WechatAuthVo {
 
     /**
      * 小程序 appid
      */
-    @Value("${wechat.app-id}")
     private String appid;
 
     /**
      * 小程序 appSecret
      */
-    @Value("${wechat.app-secret}")
     private String secret;
 
     /**
@@ -40,7 +33,9 @@ public class WechatAuthVo {
      */
     private final String grant_type = "authorization_code";
 
-    public WechatAuthVo(String js_code) {
+    public WechatAuthVo(String appid, String secret, String js_code) {
+        this.appid = appid;
+        this.secret = secret;
         this.js_code = js_code;
     }
 }
