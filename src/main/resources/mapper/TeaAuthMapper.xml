@@ -22,6 +22,20 @@
         where uname = #{uname}
     </update>
 
+    <update id="boundWithWechat">
+        update tea_auth
+        set is_bound   = 1,
+            wx_open_id = #{wxOpenId}
+        where uname = #{uname}
+    </update>
+
+    <update id="unBoundWithWechat">
+        update tea_auth
+        set is_bound   = 0,
+            wx_open_id = null
+        where uname = #{uname}
+    </update>
+
     <select id="queryTeaAuthPoByJobId" resultMap="teaAuthPoMap">
         select id, uname, passwd, is_deleted
         from tea_auth

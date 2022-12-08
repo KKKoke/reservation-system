@@ -8,19 +8,24 @@ spring:
 
 # JWTToken config
 jwt:
-  tokenHeader: wgy{83a2c57fccab603af88c819b74635963} #JWT存储的请求头, Http的header中存储JWT的名称，名字可读性越差越安全
-  secret: wgy{887ad88693bb71840856f17ad7c2cb38} #JWT加解密使用的密钥, 对JWT基础信息进行加密和解密的密匙
-  expiration: 1209600 #JWT的超期限时间(60*60*24*14)
-  tokenHead: wgy{e53ae7bec229565d9ff0f301eab2a6ff} #JWT负载中拿到开头
+  tokenHeader: wgy{83a2c57fccab603af88c819b74635963} # JWT存储的请求头, Http的header中存储JWT的名称，名字可读性越差越安全
+  secret: wgy{887ad88693bb71840856f17ad7c2cb38} # JWT加解密使用的密钥, 对JWT基础信息进行加密和解密的密匙
+  expiration: 1209600 # JWT的超期限时间(60*60*24*14)
+  tokenHead: wgy{e53ae7bec229565d9ff0f301eab2a6ff} # JWT负载中拿到开头
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
-#配置日志
+# 微信配置
+wechat:
+  app-id: wxb46fdc71944d4137
+  app-secret: 0b3f439607133524cbd7174927fb49cb
+
+# 配置日志
 logging:
-  #配置日志文件路径
+  # 配置日志文件路径
   level:
-    com.zksy.reservationsystem.dao: debug #日志打印 sql 语句
+    com.zksy.reservationsystem.dao: debug # 日志打印 sql 语句
     org.springframework.web: debug
     org.hibernate: error
   file:
