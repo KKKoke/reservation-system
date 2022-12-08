@@ -30,12 +30,23 @@ public class StudentDto {
     /** 性别 */
     private String gender;
 
-    /** 父母联系方式 */
+    /**
+     * 父母联系方式
+     */
     private String parentContact;
 
-    /** 联系方式 */
+    /**
+     * 联系方式
+     */
     private String contact;
 
-    /** 寝室号 */
+    /**
+     * 寝室号
+     */
     private String dormitory;
+
+    /**
+     * 是否绑定微信号
+     */
+    private Integer isBound;
 }

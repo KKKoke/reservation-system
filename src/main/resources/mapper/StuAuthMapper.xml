@@ -42,6 +42,12 @@
           and is_deleted = 0
     </select>
 
+    <select id="queryWxOpenIdByUname" resultType="java.lang.String">
+        select wx_open_id
+        from stu_auth
+        where uname = #{uname}
+    </select>
+
     <update id="boundWithWechat">
         update stu_auth
         set is_bound   = 1,

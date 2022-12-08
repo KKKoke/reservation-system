@@ -20,6 +20,7 @@ mybatis:
 wechat:
   app-id: wxb46fdc71944d4137
   app-secret: 0b3f439607133524cbd7174927fb49cb
+  template-id: q_DAT8iPTJ6vhZ8mKOA53kXQVqRXmo7iuaY_ATXzgYk # 通知模版id
 
 # 配置日志
 logging:

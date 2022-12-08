@@ -2,8 +2,7 @@ package com.zksy.reservationsystem.util.auth;
 
 import cn.hutool.json.JSONUtil;
 import com.zksy.reservationsystem.common.ResultCode;
-import com.zksy.reservationsystem.domain.vo.WechatAuthResultVo;
-import com.zksy.reservationsystem.domain.vo.WechatAuthVo;
+import com.zksy.reservationsystem.domain.vo.*;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.util.constant.WechatConstant;
 import com.zksy.reservationsystem.util.http.RestTemplateUtil;
@@ -30,23 +29,49 @@ public class WechatUtil {
 
     private static final String AUTH_CODE_2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
 
+    private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
+
+    private static final String SENT_NOTICE_URL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send";
+
     public static String getWxOpenId(String code) {
         WechatAuthVo wechatAuthVo = createWechatAuthVo(code);
         String response = RestTemplateUtil.getHttp(AUTH_CODE_2SESSION_URL, JSONUtil.parseObj(wechatAuthVo));
-        return handleResponse(response);
+        return handleResponseOfOpenId(response);
     }
 
     public static String getWxOpenId(String uname, String code) {
         WechatAuthVo wechatAuthVo = createWechatAuthVo(code);
         String response = RestTemplateUtil.getHttp(AUTH_CODE_2SESSION_URL, JSONUtil.parseObj(wechatAuthVo));
-        return handleResponse(response);
+        return handleResponseOfOpenId(response);
+    }
+
+    public static String getAccessToken() {
+        WxAccessTokenVo wxAccessTokenVo = createWxAccessTokenVo();
+        String response = RestTemplateUtil.getHttps(ACCESS_TOKEN_URL, JSONUtil.parseObj(wxAccessTokenVo));
+        return handleResponseOfAccessToken(response);
+    }
+
+    public static void sendNotice(String openId, NoticeDataVo noticeDataVo) {
+        String accessToken = getAccessToken();
+        WechatNoticeVo wechatNoticeVo = createWechatNoticeVo(accessToken, openId, noticeDataVo);
+        String response = RestTemplateUtil.postHttps(SENT_NOTICE_URL, JSONUtil.parseObj(wechatNoticeVo), null);
+        handleResponseOfNotice(response);
     }
 
     private static WechatAuthVo createWechatAuthVo(String code) {
         return new WechatAuthVo(wechatConstant.getAppid(), wechatConstant.getSecret(), code);
     }
 
-    private static String handleResponse(String response) {
+    private static WxAccessTokenVo createWxAccessTokenVo() {
+        return new WxAccessTokenVo(wechatConstant.getAppid(), wechatConstant.getSecret());
+    }
+
+    private static WechatNoticeVo createWechatNoticeVo(String accessToken, String openId, NoticeDataVo noticeDataVo) {
+        return new WechatNoticeVo(accessToken, wechatConstant.getTemplateId(), openId, JSONUtil.toJsonStr(noticeDataVo),
+                "formal", "zh_CN");
+    }
+
+    private static String handleResponseOfOpenId(String response) {
         log.info(response);
         WechatAuthResultVo wechatAuthResultVo = JSONUtil.toBean(response, WechatAuthResultVo.class);
         int errcode = wechatAuthResultVo.getErrcode();
@@ -67,6 +92,33 @@ public class WechatUtil {
             return wechatAuthResultVo.getOpenid();
         } else {
             throw new BizException(ResultCode.FAILED, "出现未知异常");
+        }
+    }
+
+    private static String handleResponseOfAccessToken(String response) {
+        log.info(response);
+        WxAccessTokenResultVo wxAccessTokenResultVo = JSONUtil.toBean(response, WxAccessTokenResultVo.class);
+        return wxAccessTokenResultVo.getAccess_token();
+    }
+
+    private static void handleResponseOfNotice(String response) {
+        log.info(response);
+        WechatNoticeResultVo wechatNoticeResultVo = JSONUtil.toBean(response, WechatNoticeResultVo.class);
+        int errcode = wechatNoticeResultVo.getErrcode();
+        if (Objects.equals(errcode, 0)) {
+            log.info("微信通知发送成功发送成功");
+        } else if (Objects.equals(errcode, 40001)) {
+            log.error("invalid credential  access_token is invalid or not latest");
+            throw new BizException(ResultCode.FAILED, "微信通知发送异常");
+        } else if (Objects.equals(errcode, 40003)) {
+            log.error("invalid openid");
+            throw new BizException(ResultCode.FAILED, "微信通知发送异常");
+        } else if (Objects.equals(errcode, 40014)) {
+            log.error("invalid access_token");
+            throw new BizException(ResultCode.FAILED, "微信通知发送异常");
+        } else if (Objects.equals(errcode, 40037)) {
+            log.error("invalid template_id");
+            throw new BizException(ResultCode.FAILED, "微信通知发送异常");
         }
     }
 }

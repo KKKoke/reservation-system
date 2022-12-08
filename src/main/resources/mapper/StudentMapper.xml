@@ -33,17 +33,19 @@
     </update>
 
     <select id="queryStudentDtoByStudentId" resultMap="studentDtoMap">
-        select id,
+        select s.id,
                `name`,
                student_id,
                class_name,
                gender,
                contact,
                parent_contact,
-               dormitory
-        from student
+               dormitory,
+               is_bound
+        from student s
+                 join stu_auth sa on s.student_id = sa.uname
         where student_id = #{studentId}
-          and is_deleted = 0
+          and s.is_deleted = 0
     </select>
 
     <select id="queryStudentPoByStudentId" resultMap="studentPoMap">
@@ -118,5 +120,6 @@
         <result property="parentContact" column="parent_contact"/>
         <result property="dormitory" column="dormitory"/>
         <result property="className" column="class_name"/>
+        <result property="isBound" column="is_bound"/>
     </resultMap>
 </mapper>

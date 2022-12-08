@@ -24,12 +24,23 @@ public class TeacherDto {
     /** 工号 */
     private String jobId;
 
-    /** 联系方式 */
+    /**
+     * 联系方式
+     */
     private String contact;
 
-    /** 类型  1：老师，2：管理员 */
+    /**
+     * 类型  1：老师，2：管理员
+     */
     private Integer type;
 
-    /** 职位 */
+    /**
+     * 职位
+     */
     private String position;
+
+    /**
+     * 是否绑定微信号
+     */
+    private Integer isBound;
 }
