@@ -16,8 +16,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 权限认证控制层
@@ -80,6 +82,28 @@ public class AuthController {
     }
 
     /**
+     * 微信登录
+     */
+    @PostMapping("/wechatLogin")
+    public CommonResult<?> wechatLogin(@NotNull(message = "type can not be null") Integer type,
+                                       @NotBlank(message = "code can not be null") String code) {
+        Map<String, Object> jwtMap = jwtService.wechatLogin(type, code);
+        if (ObjectUtils.isEmpty(jwtMap)) {
+            return CommonResult.validateFailed("微信授权登录失败");
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("token", jwtMap.get("token"));
+        resultMap.put("tokenHead", tokenHead);
+        resultMap.put("tokenHeader", tokenHeader);
+        if (Objects.equals(type, JwtConstant.TEA_LOGIN_TYPE)) {
+            resultMap.put("teacher", jwtMap.get("teacher"));
+        } else if (Objects.equals(type, JwtConstant.STU_LOGIN_TYPE)) {
+            resultMap.put("student", jwtMap.get("student"));
+        }
+        return CommonResult.success(resultMap);
+    }
+
+    /**
      * 刷新 token
      */
     @PostMapping("/refreshToken")
@@ -118,12 +142,12 @@ public class AuthController {
     /**
      * 解除微信绑定
      */
-    @PostMapping("/unBoundWithWechat")
-    public CommonResult<?> unBoundWithWechat(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString) {
+    @PostMapping("/unboundWithWechat")
+    public CommonResult<?> unboundWithWechat(@RequestHeader(value = "${jwt.tokenHeader}") String tokenAuthString) {
         String token = tokenAuthString.split(" ")[1];
         String type = jwtService.getClaimTypeFromToken(token);
         String uname = jwtService.getUserNameFromToken(token);
-        if (jwtService.unBoundWithWechat(uname, Integer.valueOf(type))) {
+        if (jwtService.unboundWithWechat(uname, Integer.valueOf(type))) {
             return CommonResult.success();
         }
         return CommonResult.failed();

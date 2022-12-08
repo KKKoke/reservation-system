@@ -29,7 +29,7 @@
         where uname = #{uname}
     </update>
 
-    <update id="unBoundWithWechat">
+    <update id="unboundWithWechat">
         update tea_auth
         set is_bound   = 0,
             wx_open_id = null
@@ -47,6 +47,13 @@
         select id, uname, passwd, is_deleted
         from tea_auth
         where uname = #{jobId}
+    </select>
+
+    <select id="queryTeaAuthPoByWxOpenId" resultMap="teaAuthPoMap">
+        select id, uname, passwd, is_deleted
+        from tea_auth
+        where wx_open_id = #{wxOpenId}
+          and is_deleted = 0
     </select>
 
     <resultMap id="teaAuthPoMap" type="com.zksy.reservationsystem.domain.po.TeaAuthPo">

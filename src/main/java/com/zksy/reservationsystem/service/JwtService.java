@@ -1,5 +1,7 @@
 package com.zksy.reservationsystem.service;
 
+import java.util.Map;
+
 /**
  * jwt服务层
  *
@@ -44,6 +46,15 @@ public interface JwtService {
     String teaLogin(String teaUsername, String teaPassword);
 
     /**
+     * 微信登录
+     *
+     * @param type 登录类型
+     * @param code 临时登录凭证code
+     * @return 生成的JWT的token
+     */
+    Map<String, Object> wechatLogin(Integer type, String code);
+
+    /**
      * 从token中获取登录用户名
      *
      * @return 登录用户名
@@ -68,5 +79,5 @@ public interface JwtService {
     /**
      * 解除微信绑定
      */
-    Boolean unBoundWithWechat(String uname, Integer type);
+    Boolean unboundWithWechat(String uname, Integer type);
 }

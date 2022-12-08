@@ -13,9 +13,14 @@ import org.apache.ibatis.annotations.Mapper;
 public interface StuAuthDao {
 
     /**
-     * 通过工号获取老师认证信息
+     * 通过工号获取学生认证信息
      */
     StuAuthPo queryStuAuthPoByStudentId(String studentId);
+
+    /**
+     * 通过工号获取学生认证信息
+     */
+    StuAuthPo queryStuAuthPoByWxOpenId(String wxOpenId);
 
     /**
      * 新增学生认证信息
@@ -45,5 +50,5 @@ public interface StuAuthDao {
     /**
      * 解除微信绑定
      */
-    Boolean unBoundWithWechat(String uname);
+    Boolean unboundWithWechat(String uname);
 }
