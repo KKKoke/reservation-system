@@ -6,12 +6,14 @@ import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.dao.*;
 import com.zksy.reservationsystem.domain.dto.ReserveRecordDto;
 import com.zksy.reservationsystem.domain.po.*;
+import com.zksy.reservationsystem.domain.vo.NoticeDataVo;
 import com.zksy.reservationsystem.domain.vo.RecordSearchVo;
 import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.ReserveRecordService;
 import com.zksy.reservationsystem.util.common.BeanConvertor;
 import com.zksy.reservationsystem.util.constant.ReserveConstant;
+import com.zksy.reservationsystem.util.handler.AsyncNoticeHandler;
 import com.zksy.reservationsystem.util.holder.StudentPoHolder;
 import com.zksy.reservationsystem.util.holder.TeacherPoHolder;
 import lombok.RequiredArgsConstructor;
@@ -45,13 +47,17 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
 
     private final ReentrantLock lock;
 
+    private final AsyncNoticeHandler asyncNoticeHandler;
+
     @Override
     @Transactional
     public Boolean insertReserveRecord(ReserveRecordVo reserveRecordVo) {
-        if (ObjectUtils.isEmpty(studentDao.queryStudentPoByStudentId(reserveRecordVo.getStudentId()))) {
+        StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordVo.getStudentId());
+        if (ObjectUtils.isEmpty(studentPo)) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "该学生不存在");
         }
-        if (ObjectUtils.isEmpty(teacherDao.queryTeacherPoByJobId(reserveRecordVo.getJobId()))) {
+        TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordVo.getJobId());
+        if (ObjectUtils.isEmpty(teacherPo)) {
             throw new BizException(ResultCode.VALIDATE_FAILED, "该老师不存在");
         }
         if (!isReserveTypeJsonStrValid(reserveRecordVo.getReserveType())) {
@@ -69,8 +75,14 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
                 if (!Objects.equals(periodPo.getJobId(), reserveRecordVo.getJobId())) {
                     throw new BizException(ResultCode.VALIDATE_FAILED, "不能预约别的老师的时间段");
                 }
-                return periodDao.updateIsReservedAndStudentId(reserveRecordVo.getPeriodId(), 1, reserveRecordVo.getStudentId())
+                Boolean flag = periodDao.updateIsReservedAndStudentId(reserveRecordVo.getPeriodId(), 1, reserveRecordVo.getStudentId())
                         && reserveRecordDao.insertReserveRecord(reserveRecordVo, periodPo.getStartTime(), periodPo.getEndTime(), reserveRecordVo.getPeriodId());
+                if (flag) {
+                    NoticeDataVo noticeDataVo = new NoticeDataVo(studentPo.getName(), teacherPo.getName(), periodPo.getStartTime() + " - " +
+                            periodPo.getEndTime(), "待审核", reserveRecordVo.getComment());
+                    asyncNoticeHandler.sendNotice(reserveRecordVo.getJobId(), reserveRecordVo.getStudentId(), noticeDataVo);
+                }
+                return flag;
             } else {
                 throw new BizException(ResultCode.FAILED, "当前时间段预约人数过多，请重试");
             }
@@ -133,16 +145,24 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         }
         // 审核通过
         if (Objects.equals(status, ReserveConstant.PASSED)) {
-            return reserveRecordDao.updateStatus(recordId, status);
+            Boolean flag = reserveRecordDao.updateStatus(recordId, status);
+            if (flag) {
+                asyncSendNotice(reserveRecordPo, "审核通过");
+            }
+            return flag;
         }
         // 审核不通过，需要说明拒绝原因
         else if (Objects.equals(status, ReserveConstant.NOT_PASSED)) {
             if (ObjectUtils.isEmpty(rejectReason)) {
                 throw new BizException(ResultCode.VALIDATE_FAILED, "请说明拒绝理由");
             }
-            return reserveRecordDao.updateStatus(recordId, status)
+            Boolean flag = reserveRecordDao.updateStatus(recordId, status)
                     && reserveRecordDao.updateRejectReason(recordId, rejectReason)
                     && periodDao.updateIsReservedAndStudentId(reserveRecordPo.getPeriodId(), 0, null);
+            if (flag) {
+                asyncSendNotice(reserveRecordPo, "审核不通过");
+            }
+            return flag;
         } else {
             throw new BizException(ResultCode.VALIDATE_FAILED, "不合法的状态值");
         }
@@ -189,8 +209,12 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         }
         if (Objects.equals(reserveRecordPo.getStatus(), ReserveConstant.TO_BE_REVIEWED)
                 || Objects.equals(reserveRecordPo.getStatus(), ReserveConstant.PASSED)) {
-            return reserveRecordDao.updateStatus(recordId, ReserveConstant.CANCELED)
+            Boolean flag = reserveRecordDao.updateStatus(recordId, ReserveConstant.CANCELED)
                     && periodDao.updateIsReservedAndStudentId(reserveRecordPo.getPeriodId(), 0, null);
+            if (flag) {
+                asyncSendNotice(reserveRecordPo, "取消预约");
+            }
+            return flag;
         } else {
             throw new BizException(ResultCode.FAILED, "错误的状态");
         }
@@ -251,5 +275,18 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
             }
         }
         return true;
+    }
+
+    /**
+     * 异步发送通知
+     *
+     * @param status 访谈状态
+     */
+    private void asyncSendNotice(ReserveRecordPo reserveRecordPo, String status) {
+        TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordPo.getJobId());
+        StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordPo.getStudentId());
+        NoticeDataVo noticeDataVo = new NoticeDataVo(studentPo.getName(), teacherPo.getName(), reserveRecordPo.getStartTime() + " - " +
+                reserveRecordPo.getEndTime(), status, reserveRecordPo.getComment());
+        asyncNoticeHandler.sendNotice(reserveRecordPo.getJobId(), reserveRecordPo.getStudentId(), noticeDataVo);
     }
 }

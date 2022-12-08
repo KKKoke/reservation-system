@@ -56,6 +56,12 @@
           and is_deleted = 0
     </select>
 
+    <select id="queryWxOpenIdByUname" resultType="java.lang.String">
+        select wx_open_id
+        from tea_auth
+        where uname = #{uname}
+    </select>
+
     <resultMap id="teaAuthPoMap" type="com.zksy.reservationsystem.domain.po.TeaAuthPo">
         <id property="id" column="id"/>
         <result property="uname" column="uname"/>

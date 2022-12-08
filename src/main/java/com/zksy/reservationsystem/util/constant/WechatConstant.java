@@ -24,11 +24,21 @@ public class WechatConstant {
     @Value("${wechat.app-secret}")
     private String secret;
 
+    /**
+     * 微信通知模版id
+     */
+    @Value("${wechat.template-id}")
+    private String templateId;
+
     public String getAppid() {
         return appid;
     }
 
     public String getSecret() {
         return secret;
+    }
+
+    public String getTemplateId() {
+        return templateId;
     }
 }

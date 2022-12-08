@@ -51,4 +51,9 @@ public interface TeaAuthDao {
      * 解除微信绑定
      */
     Boolean unboundWithWechat(String uname);
+
+    /**
+     * 通过用户名获取 openid
+     */
+    String queryWxOpenIdByUname(String uname);
 }

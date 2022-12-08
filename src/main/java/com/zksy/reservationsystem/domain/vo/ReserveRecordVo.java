@@ -30,7 +30,9 @@ public class ReserveRecordVo {
     @NotBlank(message = "reserveType can not be null")
     private String reserveType;
 
-    /** 访谈备注 */
+    /**
+     * 访谈备注 情况描述
+     */
     private String comment;
 
     @NotNull(message = "periodId can not be null")

@@ -29,10 +29,11 @@
     </update>
 
     <select id="queryTeacherDtoByJobId" resultMap="teacherDtoMap">
-        select id, `name`, job_id, contact, `type`, `position`
-        from teacher
+        select t.id, `name`, job_id, contact, `type`, `position`, is_bound
+        from teacher t
+                 join tea_auth ta on t.job_id = ta.uname
         where job_id = #{jobId}
-          and is_deleted = 0
+          and t.is_deleted = 0
     </select>
 
     <select id="queryTeacherPoByJobId" resultMap="teacherPoMap">
@@ -82,5 +83,6 @@
         <result property="contact" column="contact"/>
         <result property="type" column="type"/>
         <result property="position" column="position"/>
+        <result property="isBound" column="is_bound"/>
     </resultMap>
 </mapper>
