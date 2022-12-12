@@ -47,14 +47,14 @@ public class WechatUtil {
 
     public static String getAccessToken() {
         WxAccessTokenVo wxAccessTokenVo = createWxAccessTokenVo();
-        String response = RestTemplateUtil.getHttps(ACCESS_TOKEN_URL, JSONUtil.parseObj(wxAccessTokenVo));
+        String response = RestTemplateUtil.getHttp(ACCESS_TOKEN_URL, JSONUtil.parseObj(wxAccessTokenVo));
         return handleResponseOfAccessToken(response);
     }
 
     public static void sendNotice(String openId, NoticeDataVo noticeDataVo) {
         String accessToken = getAccessToken();
         WechatNoticeVo wechatNoticeVo = createWechatNoticeVo(accessToken, openId, noticeDataVo);
-        String response = RestTemplateUtil.postHttps(SENT_NOTICE_URL, JSONUtil.parseObj(wechatNoticeVo), null);
+        String response = RestTemplateUtil.postHttp(SENT_NOTICE_URL, JSONUtil.parseObj(wechatNoticeVo), null);
         handleResponseOfNotice(response);
     }
 
