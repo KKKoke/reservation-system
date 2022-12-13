@@ -12,6 +12,7 @@ import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.ReserveRecordService;
 import com.zksy.reservationsystem.util.common.BeanConvertor;
+import com.zksy.reservationsystem.util.common.TimeConvertor;
 import com.zksy.reservationsystem.util.constant.ReserveConstant;
 import com.zksy.reservationsystem.util.handler.AsyncNoticeHandler;
 import com.zksy.reservationsystem.util.holder.StudentPoHolder;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
@@ -78,8 +80,8 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
                 Boolean flag = periodDao.updateIsReservedAndStudentId(reserveRecordVo.getPeriodId(), 1, reserveRecordVo.getStudentId())
                         && reserveRecordDao.insertReserveRecord(reserveRecordVo, periodPo.getStartTime(), periodPo.getEndTime(), reserveRecordVo.getPeriodId());
                 if (flag) {
-                    NoticeDataVo noticeDataVo = new NoticeDataVo(studentPo.getName(), teacherPo.getName(), periodPo.getStartTime() + " - " +
-                            periodPo.getEndTime(), "待审核", reserveRecordVo.getComment());
+                    NoticeDataVo noticeDataVo = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
+                            TimeConvertor.connectDate(periodPo.getStartTime(), periodPo.getEndTime()), "待审核", reserveRecordVo.getComment());
                     asyncNoticeHandler.sendNotice(reserveRecordVo.getJobId(), reserveRecordVo.getStudentId(), noticeDataVo);
                 }
                 return flag;
@@ -285,8 +287,22 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
     private void asyncSendNotice(ReserveRecordPo reserveRecordPo, String status) {
         TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordPo.getJobId());
         StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordPo.getStudentId());
-        NoticeDataVo noticeDataVo = new NoticeDataVo(studentPo.getName(), teacherPo.getName(), reserveRecordPo.getStartTime() + " - " +
-                reserveRecordPo.getEndTime(), status, reserveRecordPo.getComment());
+        NoticeDataVo noticeDataVo = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
+                TimeConvertor.connectDate(reserveRecordPo.getStartTime(), reserveRecordPo.getEndTime()), status, reserveRecordPo.getComment());
         asyncNoticeHandler.sendNotice(reserveRecordPo.getJobId(), reserveRecordPo.getStudentId(), noticeDataVo);
+    }
+
+    private NoticeDataVo createNoticeDataVo(String name1, String name10, String time60, String phrase14, String thing7) {
+        HashMap<Object, Object> name1Map = new HashMap<>();
+        name1Map.put("value", name1);
+        HashMap<Object, Object> name10Map = new HashMap<>();
+        name10Map.put("value", name10);
+        HashMap<Object, Object> time60Map = new HashMap<>();
+        time60Map.put("value", time60);
+        HashMap<Object, Object> phrase14Map = new HashMap<>();
+        phrase14Map.put("value", phrase14);
+        HashMap<Object, Object> thing7Map = new HashMap<>();
+        thing7Map.put("value", thing7);
+        return new NoticeDataVo(name1Map, name10Map, time60Map, phrase14Map, thing7Map);
     }
 }
