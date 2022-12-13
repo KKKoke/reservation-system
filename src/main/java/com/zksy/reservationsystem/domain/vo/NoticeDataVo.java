@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 /**
  * 微信通知内容模版
  *
@@ -18,27 +16,7 @@ import java.util.Map;
 public class NoticeDataVo {
 
     /**
-     * 预约人
+     * 字段值例如：keyword1：订单类型，keyword2：下单金额，keyword3：配送地址，keyword4：取件地址，keyword5备注
      */
-    private Map<Object, Object> name1;
-
-    /**
-     * 预约老师
-     */
-    private Map<Object, Object> name10;
-
-    /**
-     * 预约时间段
-     */
-    private Map<Object, Object> time60;
-
-    /**
-     * 预约状态
-     */
-    private Map<Object, Object> phrase14;
-
-    /**
-     * 备注
-     */
-    private Map<Object, Object> thing7;
+    private String value;
 }

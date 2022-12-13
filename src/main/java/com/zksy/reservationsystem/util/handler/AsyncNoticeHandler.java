@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Map;
+
 /**
  * 异步任务处理
  *
@@ -28,15 +30,15 @@ public class AsyncNoticeHandler {
 
     @SneakyThrows
     @Async
-    public void sendNotice(String jobId, String studentId, NoticeDataVo noticeDataVo) {
+    public void sendNotice(String jobId, String studentId, Map<String, NoticeDataVo> dataMap) {
         log.info("{} - {} - 开始执行异步通知", studentId, jobId);
         String teaOpenId = teaAuthDao.queryWxOpenIdByUname(jobId);
         String stuOpenId = stuAuthDao.queryWxOpenIdByUname(studentId);
         if (!ObjectUtils.isEmpty(teaOpenId)) {
-            WechatUtil.sendNotice(teaOpenId, noticeDataVo);
+            WechatUtil.sendNotice(teaOpenId, dataMap);
         }
         if (!ObjectUtils.isEmpty(stuOpenId)) {
-            WechatUtil.sendNotice(stuOpenId, noticeDataVo);
+            WechatUtil.sendNotice(stuOpenId, dataMap);
         }
         log.info("{} - {} - 结束执行异步通知", studentId, jobId);
     }

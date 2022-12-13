@@ -11,6 +11,7 @@ import com.zksy.reservationsystem.util.time.WechatAccessTokenTimeTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -53,9 +54,9 @@ public class WechatUtil {
         return handleResponseOfAccessToken(response);
     }
 
-    public static void sendNotice(String openId, NoticeDataVo noticeDataVo) {
+    public static void sendNotice(String openId, Map<String, NoticeDataVo> dataMap) {
         String accessToken = WechatAccessTokenTimeTask.getAccessToken();
-        WechatNoticeVo wechatNoticeVo = createWechatNoticeVo(openId, noticeDataVo);
+        WechatNoticeVo wechatNoticeVo = createWechatNoticeVo(openId, dataMap);
         String response = HttpUtil.createPost(SENT_NOTICE_URL + "?access_token=" + accessToken)
                 .header("Content-Type", "application/json")
                 .body(JSONUtil.toJsonStr(wechatNoticeVo)).execute().body();
@@ -70,8 +71,8 @@ public class WechatUtil {
         return new WxAccessTokenVo(wechatConstant.getAppid(), wechatConstant.getSecret());
     }
 
-    private static WechatNoticeVo createWechatNoticeVo(String openId, NoticeDataVo noticeDataVo) {
-        return new WechatNoticeVo(wechatConstant.getTemplateId(), openId, noticeDataVo,
+    private static WechatNoticeVo createWechatNoticeVo(String openId, Map<String, NoticeDataVo> dataMap) {
+        return new WechatNoticeVo(wechatConstant.getTemplateId(), openId, dataMap,
                 wechatConstant.getMiniprogramState(), wechatConstant.getLang());
     }
 

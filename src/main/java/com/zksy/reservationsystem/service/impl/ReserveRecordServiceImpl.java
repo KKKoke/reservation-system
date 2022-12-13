@@ -24,6 +24,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -80,9 +81,9 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
                 Boolean flag = periodDao.updateIsReservedAndStudentId(reserveRecordVo.getPeriodId(), 1, reserveRecordVo.getStudentId())
                         && reserveRecordDao.insertReserveRecord(reserveRecordVo, periodPo.getStartTime(), periodPo.getEndTime(), reserveRecordVo.getPeriodId());
                 if (flag) {
-                    NoticeDataVo noticeDataVo = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
+                    Map<String, NoticeDataVo> dataMap = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
                             TimeConvertor.connectDate(periodPo.getStartTime(), periodPo.getEndTime()), "待审核", reserveRecordVo.getComment());
-                    asyncNoticeHandler.sendNotice(reserveRecordVo.getJobId(), reserveRecordVo.getStudentId(), noticeDataVo);
+                    asyncNoticeHandler.sendNotice(reserveRecordVo.getJobId(), reserveRecordVo.getStudentId(), dataMap);
                 }
                 return flag;
             } else {
@@ -110,7 +111,6 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByJobId(jobId);
         CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
         List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
-        assert reserveRecordDtoList != null;
         return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
@@ -131,7 +131,6 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByStudentId(studentId);
         CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
         List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
-        assert reserveRecordDtoList != null;
         return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
@@ -287,22 +286,18 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
     private void asyncSendNotice(ReserveRecordPo reserveRecordPo, String status) {
         TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordPo.getJobId());
         StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordPo.getStudentId());
-        NoticeDataVo noticeDataVo = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
+        Map<String, NoticeDataVo> dataMap = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
                 TimeConvertor.connectDate(reserveRecordPo.getStartTime(), reserveRecordPo.getEndTime()), status, reserveRecordPo.getComment());
-        asyncNoticeHandler.sendNotice(reserveRecordPo.getJobId(), reserveRecordPo.getStudentId(), noticeDataVo);
+        asyncNoticeHandler.sendNotice(reserveRecordPo.getJobId(), reserveRecordPo.getStudentId(), dataMap);
     }
 
-    private NoticeDataVo createNoticeDataVo(String name1, String name10, String time60, String phrase14, String thing7) {
-        HashMap<Object, Object> name1Map = new HashMap<>();
-        name1Map.put("value", name1);
-        HashMap<Object, Object> name10Map = new HashMap<>();
-        name10Map.put("value", name10);
-        HashMap<Object, Object> time60Map = new HashMap<>();
-        time60Map.put("value", time60);
-        HashMap<Object, Object> phrase14Map = new HashMap<>();
-        phrase14Map.put("value", phrase14);
-        HashMap<Object, Object> thing7Map = new HashMap<>();
-        thing7Map.put("value", thing7);
-        return new NoticeDataVo(name1Map, name10Map, time60Map, phrase14Map, thing7Map);
+    private Map<String, NoticeDataVo> createNoticeDataVo(String name1, String name10, String time60, String phrase14, String thing7) {
+        HashMap<String, NoticeDataVo> valueMap = new HashMap<>();
+        valueMap.put("name1", new NoticeDataVo(name1));
+        valueMap.put("name10", new NoticeDataVo(name10));
+        valueMap.put("time60", new NoticeDataVo(time60));
+        valueMap.put("phrase14", new NoticeDataVo(phrase14));
+        valueMap.put("thing7", new NoticeDataVo(thing7));
+        return valueMap;
     }
 }

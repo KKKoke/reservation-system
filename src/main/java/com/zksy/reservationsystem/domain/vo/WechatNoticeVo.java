@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 /**
  * 微信通知类
  *
@@ -33,7 +35,7 @@ public class WechatNoticeVo {
     /**
      * 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }的object
      */
-    private NoticeDataVo data;
+    private Map<String, NoticeDataVo> data;
 
     /**
      * 跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
@@ -45,7 +47,7 @@ public class WechatNoticeVo {
      */
     private String lang;
 
-    public WechatNoticeVo(String template_id, String touser, NoticeDataVo data, String miniprogram_state, String lang) {
+    public WechatNoticeVo(String template_id, String touser, Map<String, NoticeDataVo> data, String miniprogram_state, String lang) {
         this.template_id = template_id;
         this.touser = touser;
         this.data = data;
