@@ -1,5 +1,6 @@
 package com.zksy.reservationsystem.util.common;
 
+import cn.hutool.core.date.DateUtil;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.domain.dto.CommonPeriodDto;
 import com.zksy.reservationsystem.domain.po.CommonPeriodPo;
@@ -9,7 +10,9 @@ import org.springframework.util.ObjectUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 时间转换器
@@ -71,5 +74,15 @@ public class TimeConvertor {
             commonPeriodDtoList.add(new CommonPeriodDto(commonPeriodPo.getId(), startTime, endTime, commonPeriodPo.getJobId()));
         });
         return commonPeriodDtoList;
+    }
+
+    /**
+     * 用 ～ 连接两个预约日期
+     */
+    public static String connectDate(String dateStrA, String dateStrB) {
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY年MM月dd日 HH:mm", Locale.CANADA);
+        Date dateA = DateUtil.parse(dateStrA);
+        Date dateB = DateUtil.parse(dateStrB);
+        return DateUtil.format(dateA, sdf) + "~" + DateUtil.format(dateB, sdf).split(" ")[1];
     }
 }

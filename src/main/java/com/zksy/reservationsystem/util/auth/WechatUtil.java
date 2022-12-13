@@ -1,14 +1,17 @@
 package com.zksy.reservationsystem.util.auth;
 
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.zksy.reservationsystem.common.ResultCode;
 import com.zksy.reservationsystem.domain.vo.*;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.util.constant.WechatConstant;
 import com.zksy.reservationsystem.util.http.RestTemplateUtil;
+import com.zksy.reservationsystem.util.time.WechatAccessTokenTimeTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -51,10 +54,12 @@ public class WechatUtil {
         return handleResponseOfAccessToken(response);
     }
 
-    public static void sendNotice(String openId, NoticeDataVo noticeDataVo) {
-        String accessToken = getAccessToken();
-        WechatNoticeVo wechatNoticeVo = createWechatNoticeVo(accessToken, openId, noticeDataVo);
-        String response = RestTemplateUtil.postHttp(SENT_NOTICE_URL, JSONUtil.parseObj(wechatNoticeVo), null);
+    public static void sendNotice(String openId, Map<String, NoticeDataVo> dataMap) {
+        String accessToken = WechatAccessTokenTimeTask.getAccessToken();
+        WechatNoticeVo wechatNoticeVo = createWechatNoticeVo(openId, dataMap);
+        String response = HttpUtil.createPost(SENT_NOTICE_URL + "?access_token=" + accessToken)
+                .header("Content-Type", "application/json")
+                .body(JSONUtil.toJsonStr(wechatNoticeVo)).execute().body();
         handleResponseOfNotice(response);
     }
 
@@ -66,9 +71,9 @@ public class WechatUtil {
         return new WxAccessTokenVo(wechatConstant.getAppid(), wechatConstant.getSecret());
     }
 
-    private static WechatNoticeVo createWechatNoticeVo(String accessToken, String openId, NoticeDataVo noticeDataVo) {
-        return new WechatNoticeVo(accessToken, wechatConstant.getTemplateId(), openId, JSONUtil.toJsonStr(noticeDataVo),
-                "formal", "zh_CN");
+    private static WechatNoticeVo createWechatNoticeVo(String openId, Map<String, NoticeDataVo> dataMap) {
+        return new WechatNoticeVo(wechatConstant.getTemplateId(), openId, dataMap,
+                wechatConstant.getMiniprogramState(), wechatConstant.getLang());
     }
 
     private static String handleResponseOfOpenId(String response) {

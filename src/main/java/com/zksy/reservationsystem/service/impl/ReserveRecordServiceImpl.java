@@ -12,6 +12,7 @@ import com.zksy.reservationsystem.domain.vo.ReserveRecordVo;
 import com.zksy.reservationsystem.exception.BizException;
 import com.zksy.reservationsystem.service.ReserveRecordService;
 import com.zksy.reservationsystem.util.common.BeanConvertor;
+import com.zksy.reservationsystem.util.common.TimeConvertor;
 import com.zksy.reservationsystem.util.constant.ReserveConstant;
 import com.zksy.reservationsystem.util.handler.AsyncNoticeHandler;
 import com.zksy.reservationsystem.util.holder.StudentPoHolder;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -78,9 +81,9 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
                 Boolean flag = periodDao.updateIsReservedAndStudentId(reserveRecordVo.getPeriodId(), 1, reserveRecordVo.getStudentId())
                         && reserveRecordDao.insertReserveRecord(reserveRecordVo, periodPo.getStartTime(), periodPo.getEndTime(), reserveRecordVo.getPeriodId());
                 if (flag) {
-                    NoticeDataVo noticeDataVo = new NoticeDataVo(studentPo.getName(), teacherPo.getName(), periodPo.getStartTime() + " - " +
-                            periodPo.getEndTime(), "待审核", reserveRecordVo.getComment());
-                    asyncNoticeHandler.sendNotice(reserveRecordVo.getJobId(), reserveRecordVo.getStudentId(), noticeDataVo);
+                    Map<String, NoticeDataVo> dataMap = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
+                            TimeConvertor.connectDate(periodPo.getStartTime(), periodPo.getEndTime()), "待审核", reserveRecordVo.getComment());
+                    asyncNoticeHandler.sendNotice(reserveRecordVo.getJobId(), reserveRecordVo.getStudentId(), dataMap);
                 }
                 return flag;
             } else {
@@ -108,7 +111,6 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByJobId(jobId);
         CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
         List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
-        assert reserveRecordDtoList != null;
         return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
@@ -129,7 +131,6 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
         List<ReserveRecordPo> reserveRecordPoList = reserveRecordDao.queryReserveRecordPoListByStudentId(studentId);
         CommonPage<ReserveRecordPo> oldCommonPage = CommonPage.restPage(reserveRecordPoList);
         List<ReserveRecordDto> reserveRecordDtoList = BeanConvertor.reserveRecordPoListToDtoList(reserveRecordPoList);
-        assert reserveRecordDtoList != null;
         return CommonPage.setNewList(oldCommonPage, reserveRecordDtoList);
     }
 
@@ -285,8 +286,18 @@ public class ReserveRecordServiceImpl implements ReserveRecordService {
     private void asyncSendNotice(ReserveRecordPo reserveRecordPo, String status) {
         TeacherPo teacherPo = teacherDao.queryTeacherPoByJobId(reserveRecordPo.getJobId());
         StudentPo studentPo = studentDao.queryStudentPoByStudentId(reserveRecordPo.getStudentId());
-        NoticeDataVo noticeDataVo = new NoticeDataVo(studentPo.getName(), teacherPo.getName(), reserveRecordPo.getStartTime() + " - " +
-                reserveRecordPo.getEndTime(), status, reserveRecordPo.getComment());
-        asyncNoticeHandler.sendNotice(reserveRecordPo.getJobId(), reserveRecordPo.getStudentId(), noticeDataVo);
+        Map<String, NoticeDataVo> dataMap = createNoticeDataVo(studentPo.getName(), teacherPo.getName(),
+                TimeConvertor.connectDate(reserveRecordPo.getStartTime(), reserveRecordPo.getEndTime()), status, reserveRecordPo.getComment());
+        asyncNoticeHandler.sendNotice(reserveRecordPo.getJobId(), reserveRecordPo.getStudentId(), dataMap);
+    }
+
+    private Map<String, NoticeDataVo> createNoticeDataVo(String name1, String name10, String time60, String phrase14, String thing7) {
+        HashMap<String, NoticeDataVo> valueMap = new HashMap<>();
+        valueMap.put("name1", new NoticeDataVo(name1));
+        valueMap.put("name10", new NoticeDataVo(name10));
+        valueMap.put("time60", new NoticeDataVo(time60));
+        valueMap.put("phrase14", new NoticeDataVo(phrase14));
+        valueMap.put("thing7", new NoticeDataVo(thing7));
+        return valueMap;
     }
 }

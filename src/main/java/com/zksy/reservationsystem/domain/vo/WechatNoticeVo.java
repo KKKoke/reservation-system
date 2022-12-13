@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 /**
  * 微信通知类
  *
@@ -14,11 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WechatNoticeVo {
-
-    /**
-     * 接口调用凭证，该参数为 URL 参数，非 Body 参数。使用access_token或者authorizer_access_token
-     */
-    private String access_token;
 
     /**
      * 所需下发的订阅模板id
@@ -38,7 +35,7 @@ public class WechatNoticeVo {
     /**
      * 模板内容，格式形如 { "key1": { "value": any }, "key2": { "value": any } }的object
      */
-    private String data;
+    private Map<String, NoticeDataVo> data;
 
     /**
      * 跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
@@ -50,8 +47,7 @@ public class WechatNoticeVo {
      */
     private String lang;
 
-    public WechatNoticeVo(String access_token, String template_id, String touser, String data, String miniprogram_state, String lang) {
-        this.access_token = access_token;
+    public WechatNoticeVo(String template_id, String touser, Map<String, NoticeDataVo> data, String miniprogram_state, String lang) {
         this.template_id = template_id;
         this.touser = touser;
         this.data = data;

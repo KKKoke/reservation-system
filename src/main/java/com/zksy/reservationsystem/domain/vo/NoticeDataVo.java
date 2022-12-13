@@ -16,27 +16,7 @@ import lombok.NoArgsConstructor;
 public class NoticeDataVo {
 
     /**
-     * 预约人
+     * 字段值例如：keyword1：订单类型，keyword2：下单金额，keyword3：配送地址，keyword4：取件地址，keyword5备注
      */
-    private String name1;
-
-    /**
-     * 预约老师
-     */
-    private String name10;
-
-    /**
-     * 预约时间段
-     */
-    private String time60;
-
-    /**
-     * 预约状态
-     */
-    private String phrase14;
-
-    /**
-     * 备注
-     */
-    private String thing7;
+    private String value;
 }
