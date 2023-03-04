@@ -1,12 +1,12 @@
 spring:
   datasource:
 #    username: wgy{8a7db8b58fe81ff341322b7afece963a}
-    username: root
+    username: xxxxx
     #    password: WaiGuoYu*2022
-    password: Zk123456.
+    password: xxxxxx
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    url: jdbc:mysql://82.157.153.9:3306/wgy_reservation?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
-    url: jdbc:mysql://82.157.67.80:3306/wgy_reservation?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://xx.xx.xx.xx:xxxx/wgy_reservation?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource # 整合Druid数据库连接池
 
 # JWTToken config
@@ -21,9 +21,9 @@ mybatis:
 
 # 微信配置
 wechat:
-  app-id: wxb46fdc71944d4137
-  app-secret: 0b3f439607133524cbd7174927fb49cb
-  template-id: q_DAT8iPTJ6vhZ8mKOA53kXQVqRXmo7iuaY_ATXzgYk # 通知模版id
+  app-id: xxxxxxx
+  app-secret: xxxxxxx
+  template-id: xxxxxxxx # 通知模版id
   miniprogram-state: developer # 跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
   lang: zh_CN # 进入小程序查看”的语言类型，支持zh_CN(简体中文)、en_US(英文)、zh_HK(繁体中文)、zh_TW(繁体中文)，默认为zh_CN
 
